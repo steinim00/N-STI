@@ -10,7 +10,10 @@
   --naestablue: #0e4778;
   --naestablue-deep: #0a3459;
 
-  --font-display: 'Poppins', 'Century Gothic', 'Futura', sans-serif;
+  /* ITC Bauhaus is a commercial typeface and can't be embedded here;
+     Jost is an open-source revival of Kabel, the 1927 Bauhaus-era
+     geometric sans that ITC Bauhaus itself is derived from. */
+  --font-display: 'Jost', 'Century Gothic', 'Futura', sans-serif;
   --font-body: 'Times New Roman', Times, Georgia, serif;
 
   --container: 1240px;
