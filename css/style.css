@@ -509,10 +509,14 @@ a { color: inherit; }
 }
 .book-cover {
   position: relative;
-  aspect-ratio: 3 / 4;
+  width: 100%;
+  height: 0;
+  padding-top: 133.33%; /* fixed 3:4 portrait, independent of `aspect-ratio` support */
   box-shadow: -8px 0 0 var(--naestablue-deep), 0 25px 50px -12px rgba(0,0,0,0.45);
 }
 .book-cover img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
