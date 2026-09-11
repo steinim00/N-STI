@@ -10,8 +10,13 @@
   --naestablue: #0e4778;
   --naestablue-deep: #0a3459;
 
-  /* Placeholder display face while the brand typeface is finalized. */
-  --font-display: 'Jost', 'Century Gothic', 'Futura', sans-serif;
+@font-face {
+    font-family: "Naesti";
+    src: url("./fonts/Naesti-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+
   --font-body: 'Times New Roman', Times, Georgia, serif;
 
   --container: 1240px;
