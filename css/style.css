@@ -10,13 +10,15 @@
   --naestablue: #0e4778;
   --naestablue-deep: #0a3459;
 
-@font-face {
+  @font-face {
     font-family: "Naesti";
-    src: url("Naestafont.woff2") format("woff2");
+    src: url("../Naestafont.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
+  }
 
+  --font-display: "Naesti", sans-serif;
   --font-body: 'Times New Roman', Times, Georgia, serif;
 
   --container: 1240px;
@@ -53,6 +55,11 @@ a { color: inherit; }
   z-index: 999;
 }
 .skip-link:focus { left: 0; }
+
+/* Headline font styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
 
 /* ---------------- Header ---------------- */
 .site-header {
@@ -97,7 +104,7 @@ a { color: inherit; }
 }
 
 .brand-word {
-  font-family: "Naestafont", sans-serif;
+  font-family: "Naesti", sans-serif;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
