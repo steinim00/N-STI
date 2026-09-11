@@ -153,6 +153,24 @@
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* Cart badge — count persisted client-side only, no backend/cart page yet */
+  var CART_KEY = "naestiCartCount";
+  var cartCountEl = document.getElementById("cartCount");
+  var getCartCount = function () {
+    return parseInt(window.localStorage.getItem(CART_KEY), 10) || 0;
+  };
+  var renderCartCount = function (count) {
+    if (!cartCountEl) return;
+    cartCountEl.textContent = count;
+    cartCountEl.hidden = count <= 0;
+  };
+  var addToCartCount = function (amount) {
+    var count = getCartCount() + amount;
+    window.localStorage.setItem(CART_KEY, count);
+    renderCartCount(count);
+  };
+  renderCartCount(getCartCount());
+
   /* Quantity stepper (Bókin) */
   var qtyInput = document.getElementById("bookQty");
   var qtyMinus = document.getElementById("qtyMinus");
@@ -176,17 +194,40 @@
 
   /* Add to cart (Bókin) — no backend yet, just confirms the click */
   var addToCartBtn = document.getElementById("addToCartBtn");
-  if (addToCartBtn) {
-    var defaultLabel = addToCartBtn.textContent;
+  var addToCartLabel = document.getElementById("addToCartLabel");
+  if (addToCartBtn && addToCartLabel) {
+    var defaultLabel = addToCartLabel.textContent;
     addToCartBtn.addEventListener("click", function () {
       var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
-      addToCartBtn.textContent = "Bætt í körfu (" + qty + ") ✓";
+      addToCartCount(qty);
+      addToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
       addToCartBtn._resetTimer = window.setTimeout(function () {
-        addToCartBtn.textContent = defaultLabel;
+        addToCartLabel.textContent = defaultLabel;
         addToCartBtn.classList.remove("is-added");
       }, 2200);
+    });
+  }
+  /* Contact form — no backend yet, just confirms the submit */
+  var contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    var submitBtn = document.getElementById("contactSubmitBtn");
+    var submitLabel = document.getElementById("contactSubmitLabel");
+    var confirmation = document.getElementById("contactFormConfirmation");
+    var defaultSubmitLabel = submitLabel.textContent;
+    contactForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      submitLabel.textContent = "Sent ✓";
+      submitBtn.classList.add("is-sent");
+      confirmation.hidden = false;
+      window.clearTimeout(contactForm._resetTimer);
+      contactForm._resetTimer = window.setTimeout(function () {
+        submitLabel.textContent = defaultSubmitLabel;
+        submitBtn.classList.remove("is-sent");
+        confirmation.hidden = true;
+        contactForm.reset();
+      }, 3000);
     });
   }
 })();
