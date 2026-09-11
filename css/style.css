@@ -10,9 +10,7 @@
   --naestablue: #0e4778;
   --naestablue-deep: #0a3459;
 
-  /* ITC Bauhaus is a commercial typeface and can't be embedded here;
-     Jost is an open-source revival of Kabel, the 1927 Bauhaus-era
-     geometric sans that ITC Bauhaus itself is derived from. */
+  /* Placeholder display face while the brand typeface is finalized. */
   --font-display: 'Jost', 'Century Gothic', 'Futura', sans-serif;
   --font-body: 'Times New Roman', Times, Georgia, serif;
 
@@ -299,9 +297,8 @@ a { color: inherit; }
   max-width: var(--container);
   margin: 0 auto;
   padding: 0 var(--gutter);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(0.6rem, 1.6vw, 1.4rem);
+  column-count: 2;
+  column-gap: clamp(0.6rem, 1.6vw, 1.4rem);
 }
 .gallery-item {
   position: relative;
@@ -311,21 +308,20 @@ a { color: inherit; }
   border: none;
   padding: 0;
   display: block;
-  grid-column: span 2;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 clamp(0.6rem, 1.6vw, 1.4rem);
 }
-.gallery-item.tall { grid-row: span 2; }
+/* Real photographs keep their own natural aspect ratio — no cropping. */
 .gallery-item img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 32%;
+  height: auto;
+  display: block;
   filter: grayscale(1) contrast(1.05);
   transition: transform 0.6s ease, filter 0.6s ease;
-  aspect-ratio: 4 / 5;
 }
-.gallery-item.tall img { aspect-ratio: 4 / 5.6; }
 .gallery-item:hover img {
-  transform: scale(1.06);
+  transform: scale(1.03);
   filter: grayscale(1) contrast(1.15);
 }
 .gallery-item .item-veil {
@@ -351,6 +347,25 @@ a { color: inherit; }
 }
 .gallery-item:hover .item-number { transform: translateY(0); opacity: 1; }
 
+/* Not-yet-shot frames — plain mat board with the plate number, no imagery. */
+.gallery-item.placeholder {
+  aspect-ratio: 4 / 5;
+  background: var(--white);
+  border: 1px solid var(--naestagray-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+.placeholder-number {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+  letter-spacing: 0.02em;
+  color: var(--naestablue);
+  opacity: 0.32;
+}
+
 /* ---------------- Mantra banner ---------------- */
 .mantra-banner {
   background: var(--naestablue);
@@ -358,18 +373,21 @@ a { color: inherit; }
   text-align: center;
   padding: clamp(3.5rem, 10vw, 6rem) var(--gutter);
 }
-.mantra-word {
+.mantra-line {
   font-family: var(--font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(2.4rem, 9vw, 6rem);
-  letter-spacing: 0.04em;
-  line-height: 1;
-  margin: 0.1em 0;
+  font-size: clamp(1.9rem, 6.4vw, 4.2rem);
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+  margin: 0;
 }
-.mantra-word--outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--white);
+.mantra-sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  color: var(--naestagray);
+  margin: 0.9rem 0 0;
 }
 
 /* ---------------- About ---------------- */
@@ -569,10 +587,10 @@ a { color: inherit; }
   .about { grid-template-columns: 1fr; }
   .about-media { order: -1; }
   .sizes-grid { grid-template-columns: 1fr; }
-  .gallery-item { grid-column: span 4; }
-  .gallery-item.tall { grid-row: span 1; }
-  .gallery-item img,
-  .gallery-item.tall img { aspect-ratio: 4/3; }
+}
+
+@media (max-width: 560px) {
+  .gallery-grid { column-count: 1; }
 }
 
 @media (max-width: 720px) {

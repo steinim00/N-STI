@@ -1,35 +1,55 @@
 (function () {
   "use strict";
 
-  var PHOTO_COUNT = 10;
-  // Tall (portrait-emphasis) tiles for a photographic masonry rhythm.
-  var TALL_INDEXES = [1, 4, 6, 9];
+  // Slots that are shot: real photographs, shown at their own aspect ratio.
+  // Everything else is an honest "not shot yet" placeholder — no AI imagery.
+  var SLOTS = [
+    { index: 1, real: true, alt: "Kría kafar úr lofti yfir svartri strönd" },
+    { index: 2, real: true, alt: "Íslensk hyrna kind í háu grasi" },
+    { index: 3, real: false },
+    { index: 4, real: true, alt: "Tvær kríur á flugi í skýjuðum himni" },
+    { index: 5, real: false },
+    { index: 6, real: true, alt: "Göngufólk á Sólheimajökli" },
+    { index: 7, real: false },
+    { index: 8, real: false },
+    { index: 9, real: true, alt: "Kajakræðarar undir jökulsporði" },
+    { index: 10, real: false }
+  ];
 
-  var ALT_OVERRIDES = {
-    1: "Kría kafar úr lofti yfir svartri strönd",
-    2: "Íslensk hyrna kind í háu grasi",
-    4: "Tvær kríur á flugi í skýjuðum himni",
-    6: "Göngufólk á Sólheimajökli",
-    9: "Kajakræðarar undir jökulsporði"
-  };
-
-  var photos = [];
-  for (var i = 1; i <= PHOTO_COUNT; i++) {
+  var photos = []; // only real photos — this is what the lightbox navigates.
+  SLOTS.forEach(function (slot) {
+    if (!slot.real) return;
     photos.push({
-      index: i,
-      label: String(i).padStart(2, "0"),
-      src: "images/" + i + ".jpg",
-      alt: ALT_OVERRIDES[i] || ("Næsti — svarthvít ljósmynd " + i)
+      label: String(slot.index).padStart(2, "0"),
+      src: "images/" + slot.index + ".jpg",
+      alt: slot.alt
     });
-  }
+  });
 
   var grid = document.getElementById("galleryGrid");
-  photos.forEach(function (photo) {
+  var photoCursor = 0;
+  SLOTS.forEach(function (slot) {
+    var label = String(slot.index).padStart(2, "0");
+
+    if (!slot.real) {
+      var placeholder = document.createElement("div");
+      placeholder.className = "gallery-item placeholder";
+      var num = document.createElement("span");
+      num.className = "placeholder-number";
+      num.textContent = label;
+      placeholder.appendChild(num);
+      grid.appendChild(placeholder);
+      return;
+    }
+
+    var photoIndex = photoCursor++;
+    var photo = photos[photoIndex];
+
     var fig = document.createElement("button");
     fig.type = "button";
-    fig.className = "gallery-item" + (TALL_INDEXES.includes(photo.index) ? " tall" : "");
-    fig.setAttribute("data-index", photo.index - 1);
-    fig.setAttribute("aria-label", "Skoða mynd " + photo.label);
+    fig.className = "gallery-item";
+    fig.setAttribute("data-photo-index", photoIndex);
+    fig.setAttribute("aria-label", "Skoða mynd " + label);
 
     var img = document.createElement("img");
     img.src = photo.src;
@@ -39,13 +59,13 @@
     var veil = document.createElement("span");
     veil.className = "item-veil";
 
-    var num = document.createElement("span");
-    num.className = "item-number";
-    num.textContent = photo.label;
+    var numEl = document.createElement("span");
+    numEl.className = "item-number";
+    numEl.textContent = label;
 
     fig.appendChild(img);
     fig.appendChild(veil);
-    fig.appendChild(num);
+    fig.appendChild(numEl);
     grid.appendChild(fig);
   });
 
@@ -79,8 +99,8 @@
 
   grid.addEventListener("click", function (e) {
     var item = e.target.closest(".gallery-item");
-    if (!item) return;
-    openLightbox(parseInt(item.getAttribute("data-index"), 10));
+    if (!item || item.classList.contains("placeholder")) return;
+    openLightbox(parseInt(item.getAttribute("data-photo-index"), 10));
   });
 
   closeBtn.addEventListener("click", closeLightbox);
