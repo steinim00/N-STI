@@ -15,6 +15,14 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="basket-icon" viewBox="0 0 24 24">
+    <path d="M3 9l1.9 10.9a2 2 0 0 0 2 1.6h10.2a2 2 0 0 0 2-1.6L21 9z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M8 9V7a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    <path d="M2 9h20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
 <a class="skip-link" href="#book">Fara í efni</a>
 
 <header class="site-header site-header--solid" id="siteHeader">
@@ -22,16 +30,22 @@
     <a href="index.html" class="brand-mark" aria-label="Næsti - forsíða">
       <span class="brand-word">Næsti</span>
     </a>
-    <button class="nav-toggle is-dark" id="navToggle" aria-label="Opna valmynd" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="site-nav" id="siteNav">
-      <a href="index.html#gallery">Myndir</a>
-      <a href="bokin.html" aria-current="page">Bókin</a>
-      <a href="index.html#about">Um Næsta</a>
-      <a href="index.html#sizes">Stærðir</a>
-      <a href="index.html#contact">Hafa samband</a>
-    </nav>
+    <div class="nav-cluster">
+      <nav class="site-nav" id="siteNav">
+        <a href="index.html#gallery">Myndir</a>
+        <a href="bokin.html" aria-current="page">Bókin</a>
+        <a href="index.html#about">Um Næsta</a>
+        <a href="index.html#sizes">Stærðir</a>
+        <a href="index.html#contact">Hafa samband</a>
+      </nav>
+      <a href="bokin.html#book" class="cart-link" id="cartLink" aria-label="Karfa">
+        <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#basket-icon"/></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </a>
+      <button class="nav-toggle is-dark" id="navToggle" aria-label="Opna valmynd" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -69,7 +83,10 @@
             <button type="button" class="qty-btn" id="qtyPlus" aria-label="Fjölga">+</button>
           </div>
         </div>
-        <button type="button" class="add-to-cart-btn" id="addToCartBtn">Bæta í körfu</button>
+        <button type="button" class="add-to-cart-btn" id="addToCartBtn">
+          <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#basket-icon"/></svg>
+          <span class="btn-label" id="addToCartLabel">Bæta í körfu</span>
+        </button>
       </div>
     </div>
   </section>
