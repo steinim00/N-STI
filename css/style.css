@@ -816,6 +816,58 @@ h1, h2, h3, h4, h5, h6 {
 .clear-cart-btn:hover { color: var(--black); }
 .cart-summary .form-confirmation { text-align: right; }
 
+.payment-demo-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  margin: 0 0 1rem;
+}
+.payment-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin: 0 0 0.8rem;
+}
+.payment-note {
+  color: #444;
+  font-size: 0.92rem;
+  max-width: 46rem;
+  margin: 0 0 1.8rem;
+}
+.payment-mock-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem 1.4rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  color: #444;
+  margin: 0 0 1.8rem;
+}
+.payment-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem 0;
+  border-top: 2px solid var(--black);
+  margin-bottom: 1.2rem;
+}
+.order-complete-view .form-confirmation {
+  font-size: 1rem;
+  padding: 2rem 0;
+}
+
 @media (max-width: 640px) {
   .cart-item {
     grid-template-columns: 1fr auto;

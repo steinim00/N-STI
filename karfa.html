@@ -58,24 +58,59 @@
 
   <section class="cart-page" id="cartPage">
     <div class="cart-inner">
-      <div class="cart-items" id="cartItems"></div>
 
-      <p class="cart-empty" id="cartEmpty" hidden>Karfan er tóm. <a href="bokin.html">Skoða bókina</a></p>
+      <div id="cartView">
+        <div class="cart-items" id="cartItems"></div>
 
-      <div class="cart-summary" id="cartSummary" hidden>
-        <div class="cart-total-row">
-          <span>Samtals</span>
-          <span id="cartTotal">0 kr</span>
+        <p class="cart-empty" id="cartEmpty" hidden>Karfan er tóm. <a href="bokin.html">Skoða bókina</a></p>
+
+        <div class="cart-summary" id="cartSummary" hidden>
+          <div class="cart-total-row">
+            <span>Samtals</span>
+            <span id="cartTotal">0 kr</span>
+          </div>
+          <div class="cart-actions">
+            <button type="button" class="clear-cart-btn" id="clearCartBtn">Tæma körfu</button>
+            <button type="button" class="add-to-cart-btn checkout-btn" id="checkoutBtn">
+              <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
+              <span class="btn-label" id="checkoutLabel">Ganga frá pöntun</span>
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div class="payment-view" id="paymentView" hidden>
+        <p class="payment-demo-tag">Sýndarumhverfi — ekki alvöru greiðsla</p>
+        <h2 class="payment-heading">Greiðsla</h2>
+        <p class="payment-note">Engin greiðslugátt er tengd við þessa síðu ennþá, svo engin raunveruleg
+          kortaupplýsingar eru teknar við hér. Þetta skref sýnir eingöngu hvernig greiðsluferlið mun líta út
+          þegar alvöru greiðslugátt (t.d. Stripe eða íslensk kortagátt) er tengd.</p>
+
+        <div class="payment-mock-card" aria-hidden="true">
+          <svg class="payment-card-icon" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="1.5" y="4.5" width="21" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <line x1="1.5" y1="9" x2="22.5" y2="9" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span>•••• •••• •••• 4242</span>
+        </div>
+
+        <div class="payment-total-row">
+          <span>Til greiðslu</span>
+          <span id="paymentTotal">0 kr</span>
+        </div>
+
         <div class="cart-actions">
-          <button type="button" class="clear-cart-btn" id="clearCartBtn">Tæma körfu</button>
-          <button type="button" class="add-to-cart-btn checkout-btn" id="checkoutBtn">
-            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
-            <span class="btn-label" id="checkoutLabel">Ganga frá pöntun</span>
+          <button type="button" class="clear-cart-btn" id="paymentBackBtn">Til baka í körfu</button>
+          <button type="button" class="add-to-cart-btn checkout-btn" id="confirmPaymentBtn">
+            <span class="btn-label" id="confirmPaymentLabel">Staðfesta greiðslu (prufa)</span>
           </button>
         </div>
-        <p class="form-confirmation" id="checkoutConfirmation" role="status" hidden>Takk fyrir pöntunina! Við höfum samband fljótlega — ekkert greiðslukerfi er tengt ennþá.</p>
       </div>
+
+      <div class="order-complete-view" id="orderCompleteView" hidden>
+        <p class="form-confirmation" id="checkoutConfirmation" role="status">Takk fyrir pöntunina! Við höfum samband fljótlega — þetta var sýndarfærsla, engin greiðsla var raunverulega tekin.</p>
+      </div>
+
     </div>
   </section>
 
