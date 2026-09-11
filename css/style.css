@@ -500,29 +500,9 @@ h1, h2, h3, h4, h5, h6 {
   padding: clamp(4rem, 9vw, 7rem) var(--gutter);
 }
 .contact-inner { max-width: 640px; margin: 0 auto; }
-.contact-text { color: #333; }
-.contact-links {
-  display: flex;
-  justify-content: center;
-  gap: 1.8rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-.contact-links a {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border-bottom: 1px solid var(--naestablue);
-  padding-bottom: 0.2rem;
-  color: var(--naestablue-deep);
-}
-.contact-links a:hover { color: var(--black); border-color: var(--black); }
 
 .contact-form {
-  margin-top: 3rem;
+  margin-top: 0;
   text-align: left;
 }
 .form-row {
