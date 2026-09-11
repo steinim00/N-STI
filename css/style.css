@@ -511,7 +511,7 @@ a { color: inherit; }
   position: relative;
   width: 100%;
   height: 0;
-  padding-top: 133.33%; /* fixed 3:4 portrait, independent of `aspect-ratio` support */
+  padding-top: 66.67%; /* fixed 3:2 landscape, independent of `aspect-ratio` support */
   box-shadow: -8px 0 0 var(--naestablue-deep), 0 25px 50px -12px rgba(0,0,0,0.45);
 }
 .book-cover img {
@@ -579,7 +579,6 @@ a { color: inherit; }
 
 @media (max-width: 780px) {
   .book { grid-template-columns: 1fr; }
-  .book-cover { max-width: 320px; margin: 0 auto; }
 }
 
 /* ---------------- Footer ---------------- */
