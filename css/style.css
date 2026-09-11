@@ -450,6 +450,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 .about-content { align-self: center; }
 .about-content p { color: #2a2a2a; }
+.about-more-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  border: 1px solid var(--black);
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.9rem 2.1rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.about-more-link:hover { background: var(--black); color: var(--white); }
 .values-list {
   list-style: none;
   margin: 2rem 0 0;

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hafa samband — NÆSTI</title>
-<meta name="description" content="Hafðu samband við Næsta — fylgstu með á samfélagsmiðlum eða sendu okkur línu.">
+<title>Um Næsta — NÆSTI</title>
+<meta name="description" content="Um Næsta — sagan á bak við listræna ljósmyndavörumerkið Næsta.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -23,7 +23,7 @@
   </symbol>
 </svg>
 
-<a class="skip-link" href="#contact">Fara í efni</a>
+<a class="skip-link" href="#about">Fara í efni</a>
 
 <header class="site-header site-header--solid" id="siteHeader">
   <div class="header-inner">
@@ -34,9 +34,9 @@
       <nav class="site-nav" id="siteNav">
         <a href="myndir.html">Myndir</a>
         <a href="bokin.html">Bókin</a>
-        <a href="um-naesta.html">Um Næsta</a>
+        <a href="um-naesta.html" aria-current="page">Um Næsta</a>
         <a href="index.html#sizes">Stærðir</a>
-        <a href="hafa-samband.html" aria-current="page">Hafa samband</a>
+        <a href="hafa-samband.html">Hafa samband</a>
       </nav>
       <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa">
         <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
@@ -52,36 +52,27 @@
 <main>
 
   <section class="page-header">
-    <p class="section-eyebrow">Í sambandi</p>
-    <h1 class="section-title">Hafa samband</h1>
+    <p class="section-eyebrow">Um Næsta</p>
+    <h1 class="section-title">Næsti, það er ég</h1>
   </section>
 
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <form class="contact-form" id="contactForm" novalidate>
-        <div class="form-row">
-          <div class="form-field">
-            <label for="contactName">Nafn</label>
-            <input type="text" id="contactName" name="name" autocomplete="name" required>
-          </div>
-          <div class="form-field">
-            <label for="contactPhone">Símanúmer</label>
-            <input type="tel" id="contactPhone" name="phone" autocomplete="tel" required>
-          </div>
-        </div>
-        <div class="form-field">
-          <label for="contactEmail">Netfang</label>
-          <input type="email" id="contactEmail" name="email" autocomplete="email" required>
-        </div>
-        <div class="form-field">
-          <label for="contactMessage">Skilaboð</label>
-          <textarea id="contactMessage" name="message" rows="4"></textarea>
-        </div>
-        <button type="submit" class="contact-submit-btn" id="contactSubmitBtn">
-          <span id="contactSubmitLabel">Senda</span>
-        </button>
-        <p class="form-confirmation" id="contactFormConfirmation" role="status" hidden>Takk fyrir! Skilaboðin voru móttekin.</p>
-      </form>
+  <section class="about" id="about">
+    <div class="about-media">
+      <img src="images/founder.jpg" alt="Þorsteinn Magnússon, stofnandi Næsta" loading="lazy">
+    </div>
+    <div class="about-content">
+      <p>Nafnið Næsti varð til sem uppnefni sem festist við mig — og varð svo að listrænu vörumerki. Líkt og mörg af
+        stærstu vörumerkjum heims eru kennd við fólkið á bak við þau, er Næsti nátengt minni eigin sögu, sýn og
+        húmor.</p>
+      <p>Vörumerkið snýst fyrst og fremst um fágaðar ljósmyndir í mismunandi stærðum — allt frá litlum myndum á
+        sérhönnuðum borðstandi upp í stórar myndir sem þekja heilan vegg. Þetta er því ekki eingöngu
+        ljósmyndavörumerki, heldur einnig hönnunarvörumerki, undir merkjum norrænnar einföldunar.</p>
+      <ul class="values-list">
+        <li><span>Einfaldleiki</span><small>Form fylgir virkni — Bauhaus að leiðarljósi</small></li>
+        <li><span>Fágun</span><small>Vandaðar prentanir á gæðapappír</small></li>
+        <li><span>Húmor</span><small>Alvarleg fagurfræði, hlýr persónuleiki</small></li>
+        <li><span>Tímaleysi</span><small>Eingöngu svart/hvítt — engin tískubylgja</small></li>
+      </ul>
     </div>
   </section>
 
