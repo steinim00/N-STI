@@ -153,23 +153,44 @@
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* Cart badge — count persisted client-side only, no backend/cart page yet */
-  var CART_KEY = "naestiCartCount";
+  /* Cart — items persisted client-side only (localStorage), no backend yet */
+  var CART_KEY = "naestiCart";
   var cartCountEl = document.getElementById("cartCount");
-  var getCartCount = function () {
-    return parseInt(window.localStorage.getItem(CART_KEY), 10) || 0;
+  var formatIsk = function (amount) {
+    return amount.toLocaleString("is-IS") + " kr";
   };
-  var renderCartCount = function (count) {
+  var readCart = function () {
+    try {
+      var items = JSON.parse(window.localStorage.getItem(CART_KEY) || "[]");
+      return Array.isArray(items) ? items : [];
+    } catch (e) {
+      return [];
+    }
+  };
+  var writeCart = function (items) {
+    window.localStorage.setItem(CART_KEY, JSON.stringify(items));
+  };
+  var cartQtyTotal = function (items) {
+    return items.reduce(function (sum, item) { return sum + item.qty; }, 0);
+  };
+  var renderCartBadge = function () {
     if (!cartCountEl) return;
-    cartCountEl.textContent = count;
-    cartCountEl.hidden = count <= 0;
+    var total = cartQtyTotal(readCart());
+    cartCountEl.textContent = total;
+    cartCountEl.hidden = total <= 0;
   };
-  var addToCartCount = function (amount) {
-    var count = getCartCount() + amount;
-    window.localStorage.setItem(CART_KEY, count);
-    renderCartCount(count);
+  var addToCart = function (product, qty) {
+    var items = readCart();
+    var existing = items.filter(function (item) { return item.id === product.id; })[0];
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      items.push({ id: product.id, title: product.title, price: product.price, qty: qty });
+    }
+    writeCart(items);
+    renderCartBadge();
   };
-  renderCartCount(getCartCount());
+  renderCartBadge();
 
   /* Quantity stepper (Bókin) */
   var qtyInput = document.getElementById("bookQty");
@@ -199,7 +220,7 @@
     var defaultLabel = addToCartLabel.textContent;
     addToCartBtn.addEventListener("click", function () {
       var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
-      addToCartCount(qty);
+      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990 }, qty);
       addToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
@@ -229,5 +250,140 @@
         contactForm.reset();
       }, 3000);
     });
+  }
+
+  /* Cart page (Karfa / ganga frá pöntun) */
+  var cartItemsEl = document.getElementById("cartItems");
+  var cartEmptyEl = document.getElementById("cartEmpty");
+  var cartSummaryEl = document.getElementById("cartSummary");
+  var cartTotalEl = document.getElementById("cartTotal");
+  var checkoutBtn = document.getElementById("checkoutBtn");
+  var checkoutLabel = document.getElementById("checkoutLabel");
+  var clearCartBtn = document.getElementById("clearCartBtn");
+  var checkoutConfirmation = document.getElementById("checkoutConfirmation");
+
+  var renderCartPage = function () {
+    if (!cartItemsEl) return;
+    var items = readCart();
+    cartItemsEl.innerHTML = "";
+
+    if (items.length === 0) {
+      if (cartEmptyEl) cartEmptyEl.hidden = false;
+      if (cartSummaryEl) cartSummaryEl.hidden = true;
+      return;
+    }
+    if (cartEmptyEl) cartEmptyEl.hidden = true;
+    if (cartSummaryEl) cartSummaryEl.hidden = false;
+
+    var total = 0;
+    items.forEach(function (item) {
+      var lineTotal = item.price * item.qty;
+      total += lineTotal;
+
+      var row = document.createElement("div");
+      row.className = "cart-item";
+
+      var info = document.createElement("div");
+      info.className = "cart-item-info";
+      var title = document.createElement("p");
+      title.className = "cart-item-title";
+      title.textContent = item.title;
+      var unitPrice = document.createElement("p");
+      unitPrice.className = "cart-item-unit-price";
+      unitPrice.textContent = formatIsk(item.price) + " / stk";
+      info.appendChild(title);
+      info.appendChild(unitPrice);
+
+      var stepper = document.createElement("div");
+      stepper.className = "quantity-stepper cart-item-stepper";
+      var minusBtn = document.createElement("button");
+      minusBtn.type = "button";
+      minusBtn.className = "qty-btn";
+      minusBtn.setAttribute("aria-label", "Fækka");
+      minusBtn.textContent = "−";
+      var qtyDisplay = document.createElement("span");
+      qtyDisplay.className = "qty-input";
+      qtyDisplay.textContent = item.qty;
+      var plusBtn = document.createElement("button");
+      plusBtn.type = "button";
+      plusBtn.className = "qty-btn";
+      plusBtn.setAttribute("aria-label", "Fjölga");
+      plusBtn.textContent = "+";
+      minusBtn.addEventListener("click", function () {
+        updateCartItemQty(item.id, item.qty - 1);
+      });
+      plusBtn.addEventListener("click", function () {
+        updateCartItemQty(item.id, item.qty + 1);
+      });
+      stepper.appendChild(minusBtn);
+      stepper.appendChild(qtyDisplay);
+      stepper.appendChild(plusBtn);
+
+      var lineTotalEl = document.createElement("p");
+      lineTotalEl.className = "cart-item-total";
+      lineTotalEl.textContent = formatIsk(lineTotal);
+
+      var removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "cart-item-remove";
+      removeBtn.setAttribute("aria-label", "Fjarlægja úr körfu");
+      removeBtn.innerHTML = "&times;";
+      removeBtn.addEventListener("click", function () {
+        updateCartItemQty(item.id, 0);
+      });
+
+      row.appendChild(info);
+      row.appendChild(stepper);
+      row.appendChild(lineTotalEl);
+      row.appendChild(removeBtn);
+      cartItemsEl.appendChild(row);
+    });
+
+    if (cartTotalEl) cartTotalEl.textContent = formatIsk(total);
+  };
+
+  var updateCartItemQty = function (id, qty) {
+    var items = readCart();
+    if (qty <= 0) {
+      items = items.filter(function (item) { return item.id !== id; });
+    } else {
+      items.forEach(function (item) {
+        if (item.id === id) item.qty = qty;
+      });
+    }
+    writeCart(items);
+    renderCartBadge();
+    renderCartPage();
+  };
+
+  if (cartItemsEl) {
+    renderCartPage();
+
+    if (clearCartBtn) {
+      clearCartBtn.addEventListener("click", function () {
+        writeCart([]);
+        renderCartBadge();
+        renderCartPage();
+      });
+    }
+
+    if (checkoutBtn && checkoutLabel) {
+      var defaultCheckoutLabel = checkoutLabel.textContent;
+      checkoutBtn.addEventListener("click", function () {
+        if (readCart().length === 0) return;
+        checkoutLabel.textContent = "Pöntun móttekin ✓";
+        checkoutBtn.classList.add("is-added");
+        if (checkoutConfirmation) checkoutConfirmation.hidden = false;
+        writeCart([]);
+        renderCartBadge();
+        window.clearTimeout(checkoutBtn._resetTimer);
+        checkoutBtn._resetTimer = window.setTimeout(function () {
+          checkoutLabel.textContent = defaultCheckoutLabel;
+          checkoutBtn.classList.remove("is-added");
+          if (checkoutConfirmation) checkoutConfirmation.hidden = true;
+          renderCartPage();
+        }, 3000);
+      });
+    }
   }
 })();

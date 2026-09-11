@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bókin — NÆSTI</title>
-<meta name="description" content="Næsti — ljósmyndabókin. Fyrsta útgáfa frá listrænu ljósmyndavörumerki Næsta, á leið í prentun.">
+<title>Karfa — NÆSTI</title>
+<meta name="description" content="Farðu yfir körfuna þína og gakktu frá pöntun hjá Næsta.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -23,7 +23,7 @@
   </symbol>
 </svg>
 
-<a class="skip-link" href="#book">Fara í efni</a>
+<a class="skip-link" href="#cartPage">Fara í körfu</a>
 
 <header class="site-header site-header--solid" id="siteHeader">
   <div class="header-inner">
@@ -33,12 +33,12 @@
     <div class="nav-cluster">
       <nav class="site-nav" id="siteNav">
         <a href="index.html#gallery">Myndir</a>
-        <a href="bokin.html" aria-current="page">Bókin</a>
+        <a href="bokin.html">Bókin</a>
         <a href="index.html#about">Um Næsta</a>
         <a href="index.html#sizes">Stærðir</a>
         <a href="hafa-samband.html">Hafa samband</a>
       </nav>
-      <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa">
+      <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa" aria-current="page">
         <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
         <span class="cart-count" id="cartCount" hidden>0</span>
       </a>
@@ -52,41 +52,29 @@
 <main>
 
   <section class="page-header">
-    <p class="section-eyebrow">Á leið í prentun</p>
-    <h1 class="section-title">Bókin</h1>
+    <p class="section-eyebrow">Karfa</p>
+    <h1 class="section-title">Ganga frá pöntun</h1>
   </section>
 
-  <section class="book" id="book">
-    <div class="book-cover">
-      <img src="images/1.jpg" alt="Kápa á ljósmyndabók Næsta" loading="lazy">
-      <div class="book-cover-type">
-        <p class="book-cover-title">NÆSTI</p>
-        <p class="book-cover-subtitle">Ljósmyndabók</p>
-      </div>
-    </div>
-    <div class="book-details">
-      <p class="section-eyebrow">Fyrsta útgáfa</p>
-      <h2 class="book-heading">Næsti — ljósmyndabókin</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-        aliquip ex ea commodo consequat.</p>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-        anim id est laborum.</p>
-      <p class="book-price">9.990 kr</p>
-      <div class="book-purchase-row">
-        <div class="quantity-box">
-          <span class="quantity-label">Magn</span>
-          <div class="quantity-stepper">
-            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Fækka">&minus;</button>
-            <input type="number" id="bookQty" class="qty-input" value="1" min="1" max="20" inputmode="numeric" aria-label="Fjöldi eintaka">
-            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Fjölga">+</button>
-          </div>
+  <section class="cart-page" id="cartPage">
+    <div class="cart-inner">
+      <div class="cart-items" id="cartItems"></div>
+
+      <p class="cart-empty" id="cartEmpty" hidden>Karfan er tóm. <a href="bokin.html">Skoða bókina</a></p>
+
+      <div class="cart-summary" id="cartSummary" hidden>
+        <div class="cart-total-row">
+          <span>Samtals</span>
+          <span id="cartTotal">0 kr</span>
         </div>
-        <button type="button" class="add-to-cart-btn" id="addToCartBtn">
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
-          <span class="btn-label" id="addToCartLabel">Bæta í körfu</span>
-        </button>
+        <div class="cart-actions">
+          <button type="button" class="clear-cart-btn" id="clearCartBtn">Tæma körfu</button>
+          <button type="button" class="add-to-cart-btn checkout-btn" id="checkoutBtn">
+            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
+            <span class="btn-label" id="checkoutLabel">Ganga frá pöntun</span>
+          </button>
+        </div>
+        <p class="form-confirmation" id="checkoutConfirmation" role="status" hidden>Takk fyrir pöntunina! Við höfum samband fljótlega — ekkert greiðslukerfi er tengt ennþá.</p>
       </div>
     </div>
   </section>
