@@ -27,96 +27,100 @@
   });
 
   var grid = document.getElementById("galleryGrid");
-  var photoCursor = 0;
-  SLOTS.forEach(function (slot) {
-    var label = String(slot.index).padStart(2, "0");
+  if (grid) {
+    var photoCursor = 0;
+    SLOTS.forEach(function (slot) {
+      var label = String(slot.index).padStart(2, "0");
 
-    if (!slot.real) {
-      var placeholder = document.createElement("div");
-      placeholder.className = "gallery-item placeholder";
-      var num = document.createElement("span");
-      num.className = "placeholder-number";
-      num.textContent = label;
-      placeholder.appendChild(num);
-      grid.appendChild(placeholder);
-      return;
-    }
+      if (!slot.real) {
+        var placeholder = document.createElement("div");
+        placeholder.className = "gallery-item placeholder";
+        var num = document.createElement("span");
+        num.className = "placeholder-number";
+        num.textContent = label;
+        placeholder.appendChild(num);
+        grid.appendChild(placeholder);
+        return;
+      }
 
-    var photoIndex = photoCursor++;
-    var photo = photos[photoIndex];
+      var photoIndex = photoCursor++;
+      var photo = photos[photoIndex];
 
-    var fig = document.createElement("button");
-    fig.type = "button";
-    fig.className = "gallery-item";
-    fig.setAttribute("data-photo-index", photoIndex);
-    fig.setAttribute("aria-label", "Skoða mynd " + label);
+      var fig = document.createElement("button");
+      fig.type = "button";
+      fig.className = "gallery-item";
+      fig.setAttribute("data-photo-index", photoIndex);
+      fig.setAttribute("aria-label", "Skoða mynd " + label);
 
-    var img = document.createElement("img");
-    img.src = photo.src;
-    img.alt = photo.alt;
-    img.loading = "lazy";
+      var img = document.createElement("img");
+      img.src = photo.src;
+      img.alt = photo.alt;
+      img.loading = "lazy";
 
-    var veil = document.createElement("span");
-    veil.className = "item-veil";
+      var veil = document.createElement("span");
+      veil.className = "item-veil";
 
-    var numEl = document.createElement("span");
-    numEl.className = "item-number";
-    numEl.textContent = label;
+      var numEl = document.createElement("span");
+      numEl.className = "item-number";
+      numEl.textContent = label;
 
-    fig.appendChild(img);
-    fig.appendChild(veil);
-    fig.appendChild(numEl);
-    grid.appendChild(fig);
-  });
+      fig.appendChild(img);
+      fig.appendChild(veil);
+      fig.appendChild(numEl);
+      grid.appendChild(fig);
+    });
+  }
 
   /* Lightbox */
   var lightbox = document.getElementById("lightbox");
-  var lightboxImage = document.getElementById("lightboxImage");
-  var lightboxCaption = document.getElementById("lightboxCaption");
-  var closeBtn = document.getElementById("lightboxClose");
-  var prevBtn = document.getElementById("lightboxPrev");
-  var nextBtn = document.getElementById("lightboxNext");
-  var currentIndex = 0;
-  var lastFocused = null;
+  if (grid && lightbox) {
+    var lightboxImage = document.getElementById("lightboxImage");
+    var lightboxCaption = document.getElementById("lightboxCaption");
+    var closeBtn = document.getElementById("lightboxClose");
+    var prevBtn = document.getElementById("lightboxPrev");
+    var nextBtn = document.getElementById("lightboxNext");
+    var currentIndex = 0;
+    var lastFocused = null;
 
-  function openLightbox(idx) {
-    currentIndex = (idx + photos.length) % photos.length;
-    var photo = photos[currentIndex];
-    lightboxImage.src = photo.src;
-    lightboxImage.alt = photo.alt;
-    lightboxCaption.textContent = "Næsti — mynd " + photo.label;
-    lastFocused = document.activeElement;
-    lightbox.hidden = false;
-    document.body.style.overflow = "hidden";
-    closeBtn.focus();
+    var openLightbox = function (idx) {
+      currentIndex = (idx + photos.length) % photos.length;
+      var photo = photos[currentIndex];
+      lightboxImage.src = photo.src;
+      lightboxImage.alt = photo.alt;
+      lightboxCaption.textContent = "Næsti — mynd " + photo.label;
+      lastFocused = document.activeElement;
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    };
+
+    var closeLightbox = function () {
+      lightbox.hidden = true;
+      document.body.style.overflow = "";
+      if (lastFocused) lastFocused.focus();
+    };
+
+    grid.addEventListener("click", function (e) {
+      var item = e.target.closest(".gallery-item");
+      if (!item || item.classList.contains("placeholder")) return;
+      openLightbox(parseInt(item.getAttribute("data-photo-index"), 10));
+    });
+
+    closeBtn.addEventListener("click", closeLightbox);
+    prevBtn.addEventListener("click", function () { openLightbox(currentIndex - 1); });
+    nextBtn.addEventListener("click", function () { openLightbox(currentIndex + 1); });
+
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (lightbox.hidden) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") openLightbox(currentIndex - 1);
+      if (e.key === "ArrowRight") openLightbox(currentIndex + 1);
+    });
   }
-
-  function closeLightbox() {
-    lightbox.hidden = true;
-    document.body.style.overflow = "";
-    if (lastFocused) lastFocused.focus();
-  }
-
-  grid.addEventListener("click", function (e) {
-    var item = e.target.closest(".gallery-item");
-    if (!item || item.classList.contains("placeholder")) return;
-    openLightbox(parseInt(item.getAttribute("data-photo-index"), 10));
-  });
-
-  closeBtn.addEventListener("click", closeLightbox);
-  prevBtn.addEventListener("click", function () { openLightbox(currentIndex - 1); });
-  nextBtn.addEventListener("click", function () { openLightbox(currentIndex + 1); });
-
-  lightbox.addEventListener("click", function (e) {
-    if (e.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (lightbox.hidden) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") openLightbox(currentIndex - 1);
-    if (e.key === "ArrowRight") openLightbox(currentIndex + 1);
-  });
 
   /* Sticky header state */
   var header = document.getElementById("siteHeader");
@@ -146,5 +150,21 @@
   });
 
   /* Footer year */
-  document.getElementById("year").textContent = new Date().getFullYear();
+  var yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* Add to cart (Bókin) — no backend yet, just confirms the click */
+  var addToCartBtn = document.getElementById("addToCartBtn");
+  if (addToCartBtn) {
+    var defaultLabel = addToCartBtn.textContent;
+    addToCartBtn.addEventListener("click", function () {
+      addToCartBtn.textContent = "Bætt í körfu ✓";
+      addToCartBtn.classList.add("is-added");
+      window.clearTimeout(addToCartBtn._resetTimer);
+      addToCartBtn._resetTimer = window.setTimeout(function () {
+        addToCartBtn.textContent = defaultLabel;
+        addToCartBtn.classList.remove("is-added");
+      }, 2200);
+    });
+  }
 })();

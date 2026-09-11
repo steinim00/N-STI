@@ -117,6 +117,7 @@ a { color: inherit; }
 }
 .site-header.scrolled .site-nav a { color: var(--black); }
 .site-nav a:hover { border-color: currentColor; }
+.site-nav a[aria-current="page"] { border-color: currentColor; }
 
 .nav-toggle {
   display: none;
@@ -366,30 +367,6 @@ a { color: inherit; }
   opacity: 0.32;
 }
 
-/* ---------------- Mantra banner ---------------- */
-.mantra-banner {
-  background: var(--naestablue);
-  color: var(--white);
-  text-align: center;
-  padding: clamp(3.5rem, 10vw, 6rem) var(--gutter);
-}
-.mantra-line {
-  font-family: var(--font-display);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: clamp(1.9rem, 6.4vw, 4.2rem);
-  letter-spacing: 0.03em;
-  line-height: 1.15;
-  margin: 0;
-}
-.mantra-sub {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
-  color: var(--naestagray);
-  margin: 0.9rem 0 0;
-}
-
 /* ---------------- About ---------------- */
 .about {
   display: grid;
@@ -404,6 +381,7 @@ a { color: inherit; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 30% 25%;
   filter: grayscale(1) contrast(1.05);
 }
 .about-content { align-self: center; }
@@ -503,6 +481,102 @@ a { color: inherit; }
   color: var(--naestablue-deep);
 }
 .contact-links a:hover { color: var(--black); border-color: var(--black); }
+
+/* ---------------- Pages without a hero (solid header) ---------------- */
+.site-header--solid {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  backdrop-filter: saturate(180%) blur(8px);
+}
+.site-header--solid .brand-mark { color: var(--black); }
+.site-header--solid .site-nav a { color: var(--black); }
+
+.page-header {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(7rem, 14vw, 9.5rem) var(--gutter) 0;
+}
+
+/* ---------------- Book / product page ---------------- */
+.book {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: center;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(3rem, 7vw, 5rem) var(--gutter) clamp(5rem, 10vw, 8rem);
+  gap: clamp(2rem, 6vw, 4.5rem);
+}
+.book-cover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  box-shadow: -8px 0 0 var(--naestablue-deep), 0 25px 50px -12px rgba(0,0,0,0.45);
+}
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.1) brightness(0.85);
+  display: block;
+}
+.book-cover-type {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.55) 100%);
+}
+.book-cover-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+.book-cover-subtitle {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  margin: 0.5rem 0 0;
+}
+.book-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin: 0 0 1.2rem;
+}
+.book-details p { color: #2a2a2a; }
+.book-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--naestablue);
+  margin: 1.6rem 0 1.4rem !important;
+}
+.add-to-cart-btn {
+  display: inline-block;
+  border: 1px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.95rem 2.3rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.add-to-cart-btn:hover { background: var(--white); color: var(--black); }
+.add-to-cart-btn.is-added { background: var(--naestablue); border-color: var(--naestablue); }
+
+@media (max-width: 780px) {
+  .book { grid-template-columns: 1fr; }
+  .book-cover { max-width: 320px; margin: 0 auto; }
+}
 
 /* ---------------- Footer ---------------- */
 .site-footer {
