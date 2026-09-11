@@ -751,6 +751,104 @@ h1, h2, h3, h4, h5, h6 {
   .book { grid-template-columns: 1fr; }
 }
 
+/* ---------------- Cart page ---------------- */
+.cart-page {
+  padding: clamp(3rem, 7vw, 5rem) var(--gutter) clamp(5rem, 10vw, 8rem);
+}
+.cart-inner { max-width: 760px; margin: 0 auto; }
+.cart-empty {
+  color: #2a2a2a;
+  padding: 2rem 0;
+}
+.cart-empty a { color: var(--naestablue); }
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid #e4e4e2;
+}
+.cart-item-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+.cart-item-unit-price { color: #666; font-size: 0.85rem; margin: 0; }
+.cart-item-stepper.quantity-stepper {
+  border-color: #ddd;
+}
+.cart-item-stepper .qty-input {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.cart-item-total {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--naestablue);
+  min-width: 6rem;
+  text-align: right;
+  margin: 0;
+}
+.cart-item-remove {
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.2s ease;
+}
+.cart-item-remove:hover { color: var(--black); }
+.cart-summary { margin-top: 2rem; }
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem 0;
+  border-top: 2px solid var(--black);
+}
+.cart-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.clear-cart-btn {
+  border: none;
+  background: transparent;
+  color: #666;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.clear-cart-btn:hover { color: var(--black); }
+.cart-summary .form-confirmation { text-align: right; }
+
+@media (max-width: 640px) {
+  .cart-item {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "info remove" "stepper total";
+    row-gap: 0.8rem;
+  }
+  .cart-item-info { grid-area: info; }
+  .cart-item-remove { grid-area: remove; justify-self: end; }
+  .cart-item-stepper { grid-area: stepper; }
+  .cart-item-total { grid-area: total; text-align: right; }
+  .cart-actions { justify-content: space-between; }
+}
+
 /* ---------------- Footer ---------------- */
 .site-footer {
   background: var(--black);

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bókin — NÆSTI</title>
-<meta name="description" content="Næsti — ljósmyndabókin. Fyrsta útgáfa frá listrænu ljósmyndavörumerki Næsta, á leið í prentun.">
+<title>Hafa samband — NÆSTI</title>
+<meta name="description" content="Hafðu samband við Næsta — fylgstu með á samfélagsmiðlum eða sendu okkur línu.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -23,7 +23,7 @@
   </symbol>
 </svg>
 
-<a class="skip-link" href="#book">Fara í efni</a>
+<a class="skip-link" href="#contact">Fara í efni</a>
 
 <header class="site-header site-header--solid" id="siteHeader">
   <div class="header-inner">
@@ -33,10 +33,10 @@
     <div class="nav-cluster">
       <nav class="site-nav" id="siteNav">
         <a href="index.html#gallery">Myndir</a>
-        <a href="bokin.html" aria-current="page">Bókin</a>
+        <a href="bokin.html">Bókin</a>
         <a href="index.html#about">Um Næsta</a>
         <a href="index.html#sizes">Stærðir</a>
-        <a href="hafa-samband.html">Hafa samband</a>
+        <a href="hafa-samband.html" aria-current="page">Hafa samband</a>
       </nav>
       <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa">
         <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
@@ -52,42 +52,46 @@
 <main>
 
   <section class="page-header">
-    <p class="section-eyebrow">Á leið í prentun</p>
-    <h1 class="section-title">Bókin</h1>
+    <p class="section-eyebrow">Í sambandi</p>
+    <h1 class="section-title">Hafa samband</h1>
   </section>
 
-  <section class="book" id="book">
-    <div class="book-cover">
-      <img src="images/1.jpg" alt="Kápa á ljósmyndabók Næsta" loading="lazy">
-      <div class="book-cover-type">
-        <p class="book-cover-title">NÆSTI</p>
-        <p class="book-cover-subtitle">Ljósmyndabók</p>
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <p class="section-eyebrow">Fylgstu með</p>
+      <h2 class="section-title">Fylgstu með Næsta</h2>
+      <p class="contact-text">Næsti er á leið til almennings. Fylgstu með á samfélagsmiðlum til að fá fyrstu
+        fréttir af myndaútgáfum og ljósmyndabók í anda Jólabókaflóðsins.</p>
+      <div class="contact-links">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">TikTok</a>
       </div>
-    </div>
-    <div class="book-details">
-      <p class="section-eyebrow">Fyrsta útgáfa</p>
-      <h2 class="book-heading">Næsti — ljósmyndabókin</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-        aliquip ex ea commodo consequat.</p>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-        anim id est laborum.</p>
-      <p class="book-price">9.990 kr</p>
-      <div class="book-purchase-row">
-        <div class="quantity-box">
-          <span class="quantity-label">Magn</span>
-          <div class="quantity-stepper">
-            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Fækka">&minus;</button>
-            <input type="number" id="bookQty" class="qty-input" value="1" min="1" max="20" inputmode="numeric" aria-label="Fjöldi eintaka">
-            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Fjölga">+</button>
+
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="contactName">Nafn</label>
+            <input type="text" id="contactName" name="name" autocomplete="name" required>
+          </div>
+          <div class="form-field">
+            <label for="contactPhone">Símanúmer</label>
+            <input type="tel" id="contactPhone" name="phone" autocomplete="tel" required>
           </div>
         </div>
-        <button type="button" class="add-to-cart-btn" id="addToCartBtn">
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
-          <span class="btn-label" id="addToCartLabel">Bæta í körfu</span>
+        <div class="form-field">
+          <label for="contactEmail">Netfang</label>
+          <input type="email" id="contactEmail" name="email" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="contactMessage">Skilaboð</label>
+          <textarea id="contactMessage" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="contact-submit-btn" id="contactSubmitBtn">
+          <span id="contactSubmitLabel">Senda</span>
         </button>
-      </div>
+        <p class="form-confirmation" id="contactFormConfirmation" role="status" hidden>Takk fyrir! Skilaboðin voru móttekin.</p>
+      </form>
     </div>
   </section>
 
