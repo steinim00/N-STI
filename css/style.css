@@ -29,6 +29,15 @@
 
 * { box-sizing: border-box; }
 
+::selection {
+  background: var(--naestablue);
+  color: var(--white);
+}
+::-moz-selection {
+  background: var(--naestablue);
+  color: var(--white);
+}
+
 html {
   scroll-behavior: smooth;
 }
