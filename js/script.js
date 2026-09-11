@@ -5,13 +5,21 @@
   // Tall (portrait-emphasis) tiles for a photographic masonry rhythm.
   var TALL_INDEXES = [1, 4, 6, 9];
 
+  var ALT_OVERRIDES = {
+    1: "Kría kafar úr lofti yfir svartri strönd",
+    2: "Íslensk hyrna kind í háu grasi",
+    4: "Tvær kríur á flugi í skýjuðum himni",
+    6: "Göngufólk á Sólheimajökli",
+    9: "Kajakræðarar undir jökulsporði"
+  };
+
   var photos = [];
   for (var i = 1; i <= PHOTO_COUNT; i++) {
     photos.push({
       index: i,
       label: String(i).padStart(2, "0"),
       src: "images/" + i + ".jpg",
-      alt: "Næsti — svarthvít ljósmynd " + i
+      alt: ALT_OVERRIDES[i] || ("Næsti — svarthvít ljósmynd " + i)
     });
   }
 
