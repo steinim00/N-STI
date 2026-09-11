@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: "Naesti";
-  src: url("/Naestafont.woff2") format("woff2");
+  src: url("./Naestafont.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
