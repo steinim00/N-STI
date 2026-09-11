@@ -9,15 +9,17 @@
   --naestagray-deep: #b9b9b5;
   --naestablue: #0e4778;
   --naestablue-deep: #0a3459;
+}
 
-  @font-face {
-    font-family: "Naesti";
-    src: url("../Naestafont.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
+@font-face {
+  font-family: "Naesti";
+  src: url("/Naestafont.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
+:root {
   --font-display: "Naesti", sans-serif;
   --font-body: 'Times New Roman', Times, Georgia, serif;
 
