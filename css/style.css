@@ -84,18 +84,9 @@ a { color: inherit; }
 .site-header.scrolled .brand-mark { color: var(--black); }
 
 .logo-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 2.4rem;
   height: 2.4rem;
-  border-radius: 50%;
-  background: var(--naestablue);
-  color: var(--white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0;
   flex: none;
 }
 
@@ -181,14 +172,9 @@ a { color: inherit; }
   text-align: center;
 }
 .hero-logo {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2rem, 5vw, 3rem);
+  display: block;
   width: clamp(3.4rem, 6vw, 4.6rem);
   height: clamp(3.4rem, 6vw, 4.6rem);
-  line-height: clamp(3.4rem, 6vw, 4.6rem);
-  border-radius: 50%;
-  background: var(--naestablue);
   margin: 0 auto 1.5rem;
 }
 .hero-title {
