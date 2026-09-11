@@ -153,12 +153,34 @@
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* Quantity stepper (Bókin) */
+  var qtyInput = document.getElementById("bookQty");
+  var qtyMinus = document.getElementById("qtyMinus");
+  var qtyPlus = document.getElementById("qtyPlus");
+  if (qtyInput && qtyMinus && qtyPlus) {
+    var qtyMin = parseInt(qtyInput.min, 10) || 1;
+    var qtyMax = parseInt(qtyInput.max, 10) || 20;
+    var clampQty = function () {
+      var value = parseInt(qtyInput.value, 10);
+      if (isNaN(value)) value = qtyMin;
+      qtyInput.value = Math.min(qtyMax, Math.max(qtyMin, value));
+    };
+    qtyMinus.addEventListener("click", function () {
+      qtyInput.value = Math.max(qtyMin, (parseInt(qtyInput.value, 10) || qtyMin) - 1);
+    });
+    qtyPlus.addEventListener("click", function () {
+      qtyInput.value = Math.min(qtyMax, (parseInt(qtyInput.value, 10) || qtyMin) + 1);
+    });
+    qtyInput.addEventListener("change", clampQty);
+  }
+
   /* Add to cart (Bókin) — no backend yet, just confirms the click */
   var addToCartBtn = document.getElementById("addToCartBtn");
   if (addToCartBtn) {
     var defaultLabel = addToCartBtn.textContent;
     addToCartBtn.addEventListener("click", function () {
-      addToCartBtn.textContent = "Bætt í körfu ✓";
+      var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+      addToCartBtn.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
       addToCartBtn._resetTimer = window.setTimeout(function () {
