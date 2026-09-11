@@ -25,7 +25,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1181750519
-ModificationTime: 1789145972
+ModificationTime: 1789146618
 PfmFamily: 81
 TTFWeight: 500
 TTFWidth: 5
@@ -131,7 +131,7 @@ NameList: AGL For New Fonts
 DisplaySize: -48
 AntiAlias: 1
 FitToEm: 0
-WinInfo: 0 51 18
+WinInfo: 0 26 18
 BeginPrivate: 0
 EndPrivate
 BeginChars: 65546 263
@@ -1617,7 +1617,7 @@ StartChar: N
 Encoding: 78 78 49
 Width: 1251
 GlyphClass: 2
-Flags: W
+Flags: WO
 LayerCount: 2
 Fore
 SplineSet
@@ -1724,7 +1724,7 @@ StartChar: Q
 Encoding: 81 81 52
 Width: 1593
 GlyphClass: 2
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
