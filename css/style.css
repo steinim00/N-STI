@@ -563,13 +563,18 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--naestablue);
   margin: 1.6rem 0 1.4rem !important;
 }
+.book-purchase-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 .quantity-box {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
   border: 1px solid #ccc;
   padding: 0.6rem 1rem;
-  margin: 0 0 1.4rem;
 }
 .quantity-label {
   font-family: var(--font-display);
