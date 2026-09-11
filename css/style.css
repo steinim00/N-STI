@@ -387,6 +387,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 .gallery-item:hover .item-number { transform: translateY(0); opacity: 1; }
 
+.gallery-more-link {
+  display: block;
+  width: fit-content;
+  margin: 1rem auto 0;
+  border: 1px solid var(--black);
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.9rem 2.1rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.gallery-more-link:hover { background: var(--black); color: var(--white); }
+
 /* Not-yet-shot frames — plain mat board with the plate number, no imagery. */
 .gallery-item.placeholder {
   aspect-ratio: 4 / 5;

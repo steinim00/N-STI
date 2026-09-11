@@ -26,49 +26,58 @@
     });
   });
 
+  var buildGalleryItem = function (photoIndex) {
+    var photo = photos[photoIndex];
+    var fig = document.createElement("button");
+    fig.type = "button";
+    fig.className = "gallery-item";
+    fig.setAttribute("data-photo-index", photoIndex);
+    fig.setAttribute("aria-label", "Skoða mynd " + photo.label);
+
+    var img = document.createElement("img");
+    img.src = photo.src;
+    img.alt = photo.alt;
+    img.loading = "lazy";
+
+    var veil = document.createElement("span");
+    veil.className = "item-veil";
+
+    var numEl = document.createElement("span");
+    numEl.className = "item-number";
+    numEl.textContent = photo.label;
+
+    fig.appendChild(img);
+    fig.appendChild(veil);
+    fig.appendChild(numEl);
+    return fig;
+  };
+
   var grid = document.getElementById("galleryGrid");
   if (grid) {
-    var photoCursor = 0;
-    SLOTS.forEach(function (slot) {
-      var label = String(slot.index).padStart(2, "0");
+    var previewCount = parseInt(grid.getAttribute("data-preview"), 10);
 
-      if (!slot.real) {
-        var placeholder = document.createElement("div");
-        placeholder.className = "gallery-item placeholder";
-        var num = document.createElement("span");
-        num.className = "placeholder-number";
-        num.textContent = label;
-        placeholder.appendChild(num);
-        grid.appendChild(placeholder);
-        return;
-      }
-
-      var photoIndex = photoCursor++;
-      var photo = photos[photoIndex];
-
-      var fig = document.createElement("button");
-      fig.type = "button";
-      fig.className = "gallery-item";
-      fig.setAttribute("data-photo-index", photoIndex);
-      fig.setAttribute("aria-label", "Skoða mynd " + label);
-
-      var img = document.createElement("img");
-      img.src = photo.src;
-      img.alt = photo.alt;
-      img.loading = "lazy";
-
-      var veil = document.createElement("span");
-      veil.className = "item-veil";
-
-      var numEl = document.createElement("span");
-      numEl.className = "item-number";
-      numEl.textContent = label;
-
-      fig.appendChild(img);
-      fig.appendChild(veil);
-      fig.appendChild(numEl);
-      grid.appendChild(fig);
-    });
+    if (previewCount) {
+      // Index page teaser: a handful of real photos only, no placeholders.
+      photos.slice(0, previewCount).forEach(function (photo, photoIndex) {
+        grid.appendChild(buildGalleryItem(photoIndex));
+      });
+    } else {
+      // Full gallery page: every slot, placeholders included, in order.
+      var photoCursor = 0;
+      SLOTS.forEach(function (slot) {
+        if (!slot.real) {
+          var placeholder = document.createElement("div");
+          placeholder.className = "gallery-item placeholder";
+          var num = document.createElement("span");
+          num.className = "placeholder-number";
+          num.textContent = String(slot.index).padStart(2, "0");
+          placeholder.appendChild(num);
+          grid.appendChild(placeholder);
+          return;
+        }
+        grid.appendChild(buildGalleryItem(photoCursor++));
+      });
+    }
   }
 
   /* Lightbox */
