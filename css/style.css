@@ -12,7 +12,7 @@
 
 @font-face {
     font-family: "Naesti";
-    src: url("./fonts/Naesti-Regular.woff2") format("woff2");
+    src: url("./fonts/Naestafont.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -97,7 +97,7 @@ a { color: inherit; }
 }
 
 .brand-word {
-  font-family: var(--font-display);
+  font-family: "Naestafont", sans-serif;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
