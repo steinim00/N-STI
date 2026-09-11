@@ -258,9 +258,17 @@
   var cartSummaryEl = document.getElementById("cartSummary");
   var cartTotalEl = document.getElementById("cartTotal");
   var checkoutBtn = document.getElementById("checkoutBtn");
-  var checkoutLabel = document.getElementById("checkoutLabel");
   var clearCartBtn = document.getElementById("clearCartBtn");
-  var checkoutConfirmation = document.getElementById("checkoutConfirmation");
+
+  var cartViewEl = document.getElementById("cartView");
+  var paymentViewEl = document.getElementById("paymentView");
+  var orderCompleteViewEl = document.getElementById("orderCompleteView");
+  var paymentTotalEl = document.getElementById("paymentTotal");
+  var paymentBackBtn = document.getElementById("paymentBackBtn");
+  var confirmPaymentBtn = document.getElementById("confirmPaymentBtn");
+  var confirmPaymentLabel = document.getElementById("confirmPaymentLabel");
+
+  var lastCartTotal = 0;
 
   var renderCartPage = function () {
     if (!cartItemsEl) return;
@@ -339,7 +347,14 @@
       cartItemsEl.appendChild(row);
     });
 
+    lastCartTotal = total;
     if (cartTotalEl) cartTotalEl.textContent = formatIsk(total);
+  };
+
+  var showCartStep = function (step) {
+    if (cartViewEl) cartViewEl.hidden = step !== "cart";
+    if (paymentViewEl) paymentViewEl.hidden = step !== "payment";
+    if (orderCompleteViewEl) orderCompleteViewEl.hidden = step !== "complete";
   };
 
   var updateCartItemQty = function (id, qty) {
@@ -358,6 +373,7 @@
 
   if (cartItemsEl) {
     renderCartPage();
+    showCartStep("cart");
 
     if (clearCartBtn) {
       clearCartBtn.addEventListener("click", function () {
@@ -367,22 +383,33 @@
       });
     }
 
-    if (checkoutBtn && checkoutLabel) {
-      var defaultCheckoutLabel = checkoutLabel.textContent;
+    if (checkoutBtn) {
       checkoutBtn.addEventListener("click", function () {
         if (readCart().length === 0) return;
-        checkoutLabel.textContent = "Pöntun móttekin ✓";
-        checkoutBtn.classList.add("is-added");
-        if (checkoutConfirmation) checkoutConfirmation.hidden = false;
-        writeCart([]);
-        renderCartBadge();
-        window.clearTimeout(checkoutBtn._resetTimer);
-        checkoutBtn._resetTimer = window.setTimeout(function () {
-          checkoutLabel.textContent = defaultCheckoutLabel;
-          checkoutBtn.classList.remove("is-added");
-          if (checkoutConfirmation) checkoutConfirmation.hidden = true;
+        if (paymentTotalEl) paymentTotalEl.textContent = formatIsk(lastCartTotal);
+        showCartStep("payment");
+      });
+    }
+
+    if (paymentBackBtn) {
+      paymentBackBtn.addEventListener("click", function () {
+        showCartStep("cart");
+      });
+    }
+
+    if (confirmPaymentBtn && confirmPaymentLabel) {
+      var defaultConfirmLabel = confirmPaymentLabel.textContent;
+      confirmPaymentBtn.addEventListener("click", function () {
+        confirmPaymentBtn.disabled = true;
+        confirmPaymentLabel.textContent = "Vinnur úr sýndargreiðslu…";
+        window.setTimeout(function () {
+          writeCart([]);
+          renderCartBadge();
           renderCartPage();
-        }, 3000);
+          showCartStep("complete");
+          confirmPaymentBtn.disabled = false;
+          confirmPaymentLabel.textContent = defaultConfirmLabel;
+        }, 1100);
       });
     }
   }
