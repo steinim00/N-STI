@@ -1,3 +1,39 @@
+/* ---------------- Page transitions ---------------- */
+/* Opts every same-origin navigation between pages into the browser's
+   cross-document View Transition API. No-op (plain navigation) in
+   browsers that don't support it yet. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: polaroid-slide-out 0.45s ease-in both;
+  }
+  ::view-transition-new(root) {
+    animation: polaroid-slide-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  @keyframes polaroid-slide-out {
+    to {
+      opacity: 0;
+      transform: scale(0.95) rotate(1.5deg);
+    }
+  }
+  @keyframes polaroid-slide-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9) rotate(-3deg) translateY(28px);
+      box-shadow: 0 30px 60px -10px rgba(0,0,0,0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg) translateY(0);
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+  }
+}
+
 /* ============================================================
    NÆSTI — brand tokens
    svartur / hvítur / Næstagrár (Pantone Cool Gray 1C) / Næstablár
