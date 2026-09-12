@@ -71,9 +71,74 @@
 
     if (previewCount) {
       // Index page teaser: a handful of real photos only, no placeholders.
+      var slides = [];
       photos.slice(0, previewCount).forEach(function (photo, photoIndex) {
-        grid.appendChild(buildGalleryItem(photoIndex));
+        var slide = buildGalleryItem(photoIndex);
+        slides.push(slide);
+        grid.appendChild(slide);
       });
+      if (slides.length) slides[0].classList.add("is-active");
+
+      /* Slideshow controls — autoplay, arrows, dots */
+      var dotsWrap = document.getElementById("slideDots");
+      var prevBtn = document.getElementById("slidePrev");
+      var nextBtn = document.getElementById("slideNext");
+      var dots = slides.map(function (_, i) {
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "slideshow-dot" + (i === 0 ? " is-active" : "");
+        dot.setAttribute("aria-label", "Mynd " + (i + 1));
+        if (dotsWrap) dotsWrap.appendChild(dot);
+        return dot;
+      });
+
+      var activeSlide = 0;
+      var AUTOPLAY_MS = 4500;
+      var autoplayTimer = null;
+
+      var showSlide = function (index) {
+        activeSlide = (index + slides.length) % slides.length;
+        slides.forEach(function (slide, i) {
+          slide.classList.toggle("is-active", i === activeSlide);
+        });
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle("is-active", i === activeSlide);
+        });
+      };
+
+      var startAutoplay = function () {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = window.setInterval(function () {
+          showSlide(activeSlide + 1);
+        }, AUTOPLAY_MS);
+      };
+
+      if (slides.length > 1) {
+        if (prevBtn) prevBtn.addEventListener("click", function () {
+          showSlide(activeSlide - 1);
+          startAutoplay();
+        });
+        if (nextBtn) nextBtn.addEventListener("click", function () {
+          showSlide(activeSlide + 1);
+          startAutoplay();
+        });
+        dots.forEach(function (dot, i) {
+          dot.addEventListener("click", function () {
+            showSlide(i);
+            startAutoplay();
+          });
+        });
+
+        var slideshowWrap = grid.closest(".gallery-slideshow-wrap");
+        if (slideshowWrap) {
+          slideshowWrap.addEventListener("mouseenter", function () { window.clearInterval(autoplayTimer); });
+          slideshowWrap.addEventListener("mouseleave", startAutoplay);
+        }
+        startAutoplay();
+      } else {
+        if (prevBtn) prevBtn.hidden = true;
+        if (nextBtn) nextBtn.hidden = true;
+      }
     } else {
       // Full gallery page: every slot, placeholders included, in order.
       var photoCursor = 0;
