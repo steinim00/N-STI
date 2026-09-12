@@ -281,10 +281,14 @@
       heroTitle.style.top = flightStart.top + "px";
       heroTitle.style.left = flightStart.left + "px";
       heroTitle.style.width = flightStart.width + "px";
-      // The scroll position at which the title's natural BOTTOM edge would
-      // pass behind the fixed header — i.e. the moment it's fully gone,
-      // not just starting to duck behind it.
-      headerSolidThreshold = Math.max(0, flightStart.bottom - header.getBoundingClientRect().height);
+      // The scroll position at which the title's natural top edge would
+      // start passing behind the fixed header. Using the bottom edge
+      // instead (wait for it to be *fully* gone) sounds more correct on
+      // paper, but by then there's nothing left on screen to visibly snap
+      // — the whole point of the motion is that the still-fully-visible
+      // title suddenly shrinks into the corner right as it would start
+      // disappearing, not that it reappears from nothing.
+      headerSolidThreshold = Math.max(0, flightStart.top - header.getBoundingClientRect().height);
     };
 
     var wasDocked = null;
@@ -349,6 +353,42 @@
       navToggle.classList.remove("is-open");
       navToggle.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
+    });
+  });
+
+  /* Nav-link click reveal: a naestablue circle grows from the click point
+     to cover the whole header. Resets itself afterwards so it's ready
+     again for an in-page anchor link that doesn't actually navigate away. */
+  var headerRipple = document.createElement("div");
+  headerRipple.className = "header-ripple";
+  headerRipple.setAttribute("aria-hidden", "true");
+  header.appendChild(headerRipple);
+
+  siteNav.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var headerRect = header.getBoundingClientRect();
+      var x = e.clientX - headerRect.left;
+      var y = e.clientY - headerRect.top;
+      var maxDist = Math.max(
+        Math.hypot(x, y),
+        Math.hypot(headerRect.width - x, y),
+        Math.hypot(x, headerRect.height - y),
+        Math.hypot(headerRect.width - x, headerRect.height - y)
+      );
+
+      headerRipple.style.transition = "none";
+      headerRipple.classList.remove("is-active");
+      headerRipple.style.left = x + "px";
+      headerRipple.style.top = y + "px";
+      headerRipple.style.setProperty("--ripple-scale", (maxDist / 12) + "");
+      void headerRipple.offsetWidth; // force layout before re-enabling the transition
+      headerRipple.style.transition = "";
+      headerRipple.classList.add("is-active");
+
+      window.clearTimeout(headerRipple._resetTimer);
+      headerRipple._resetTimer = window.setTimeout(function () {
+        headerRipple.classList.remove("is-active");
+      }, 900);
     });
   });
 
