@@ -7,45 +7,28 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* The old page gets blown out by the "flash" and held there while the
-     new page fades in underneath, already just as overexposed — so the
-     flash reads as one continuous camera-flash moment, not a cut. */
+  /* The old page just holds still and gets covered — it's the camera body,
+     not the thing in motion. */
   ::view-transition-old(root) {
-    animation: polaroid-flash-out 0.35s ease-out both;
+    animation: none;
+    z-index: 1;
   }
-  /* The new page then "develops": it emerges overexposed and washed out,
-     like a fresh Polaroid print, and gradually resolves into full
-     contrast and colour as the flash fades and the image develops. */
+  /* The new page slides down and out from above like a print easing out of
+     a Polaroid's slot: fast to start, a soft mechanical settle at the end
+     instead of stopping dead. A drop shadow gives it some physical weight
+     as it slides over the old page underneath. */
   ::view-transition-new(root) {
-    animation: polaroid-develop-in 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation: polaroid-print-out 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    box-shadow: 0 25px 45px -10px rgba(0,0,0,0.45);
+    z-index: 2;
   }
 
-  @keyframes polaroid-flash-out {
-    0% {
-      opacity: 1;
-      filter: brightness(1) contrast(1);
+  @keyframes polaroid-print-out {
+    from {
+      transform: translateY(-100%);
     }
-    20% {
-      opacity: 1;
-      filter: brightness(4.5) contrast(0.6);
-    }
-    100% {
-      opacity: 0;
-      filter: brightness(4.5) contrast(0.6);
-    }
-  }
-  @keyframes polaroid-develop-in {
-    0% {
-      opacity: 0;
-      filter: brightness(4.5) contrast(0.6) saturate(0.4);
-    }
-    12% {
-      opacity: 1;
-      filter: brightness(4.5) contrast(0.6) saturate(0.4);
-    }
-    100% {
-      opacity: 1;
-      filter: brightness(1) contrast(1) saturate(1);
+    to {
+      transform: translateY(0);
     }
   }
 }
@@ -311,7 +294,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--white);
   text-align: center;
   will-change: transform;
-  transition: color 0.2s ease, transform 0.3s ease;
+  transition: color 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hero-title.is-docked { color: var(--black); }
 .hero-tagline {
