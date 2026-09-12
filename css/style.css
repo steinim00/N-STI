@@ -249,6 +249,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 .hero-title {
+  display: inline-block;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(3rem, 11vw, 7.5rem);
@@ -256,6 +257,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   line-height: 0.95;
   color: var(--white);
+  text-align: center;
   will-change: transform;
   transition: color 0.2s ease;
 }
