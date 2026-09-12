@@ -119,6 +119,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 0; left: 0; right: 0;
   z-index: 100;
   padding: 1.1rem var(--gutter);
+  overflow: hidden;
   transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
 }
 .site-header.scrolled {
@@ -130,12 +131,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header-inner {
+  position: relative;
+  z-index: 2;
   max-width: var(--container);
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+/* Click "reveal" on a nav link: a naestablue circle grows from the click
+   point until it covers the whole header, clipped by .site-header's own
+   overflow:hidden. Sits behind .header-inner so the labels stay readable. */
+.header-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 50%;
+  background: var(--naestablue);
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 0.5s ease-out;
+  z-index: 1;
+  pointer-events: none;
+}
+.header-ripple.is-active {
+  transform: scale(var(--ripple-scale, 60));
 }
 
 .brand-mark {
@@ -175,6 +200,7 @@ h1, h2, h3, h4, h5, h6 {
   gap: 2rem;
 }
 .site-nav a {
+  position: relative;
   color: var(--white);
   text-decoration: none;
   font-family: var(--font-display);
@@ -183,12 +209,23 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   font-weight: 500;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid transparent;
-  transition: color 0.35s ease, border-color 0.2s ease;
+  transition: color 0.35s ease;
+}
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
 }
 .site-header.scrolled .site-nav a { color: var(--black); }
-.site-nav a:hover { border-color: currentColor; }
-.site-nav a[aria-current="page"] { border-color: currentColor; }
+.site-nav a:hover::after,
+.site-nav a[aria-current="page"]::after { transform: scaleX(1); }
 
 .cart-link {
   position: relative;
