@@ -260,7 +260,24 @@
 
     var measureFlight = function () {
       flightStart = heroTitleSpacer.getBoundingClientRect();
+
+      // Measure the target slot in the header's *scrolled* (compact-padding)
+      // state, since that's what the title is actually docking against —
+      // otherwise a title measured while unscrolled ends up a few pixels
+      // off from where the header's word really sits once solid. Padding
+      // is itself transitioned on that class, so briefly kill the
+      // transition too — otherwise this measurement just catches frame
+      // zero of that animation, still at the old padding.
+      var wasScrolled = header.classList.contains("scrolled");
+      var prevHeaderTransition = header.style.transition;
+      header.style.transition = "none";
+      header.classList.add("scrolled");
+      void header.offsetHeight; // force layout with the new, untransitioned styles
       flightEnd = brandWordTarget.getBoundingClientRect();
+      header.classList.toggle("scrolled", wasScrolled);
+      void header.offsetHeight;
+      header.style.transition = prevHeaderTransition;
+
       heroTitle.style.top = flightStart.top + "px";
       heroTitle.style.left = flightStart.left + "px";
       heroTitle.style.width = flightStart.width + "px";
