@@ -38,6 +38,12 @@
   color: var(--white);
 }
 
+/* ---------------- Image skeleton loading ---------------- */
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -103,9 +109,23 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.6rem;
   text-decoration: none;
   color: var(--white);
-  transition: color 0.35s ease;
+  transition: color 0.35s ease, opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .site-header.scrolled .brand-mark { color: var(--black); }
+
+/* On the transparent hero header, the small mark stays hidden (the big hero
+   title already says NÆSTI) until scrolled, then it eases in from roughly
+   where the hero title sits into the header's corner. */
+.site-header:not(.site-header--solid) .brand-mark {
+  opacity: 0;
+  transform: translate(44vw, 12px) scale(1.7);
+  pointer-events: none;
+}
+.site-header:not(.site-header--solid).scrolled .brand-mark {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
 
 .brand-word {
   font-family: "Naesti", sans-serif;
@@ -207,13 +227,20 @@ h1, h2, h3, h4, h5, h6 {
 .hero-media {
   position: absolute;
   inset: 0;
+  background: linear-gradient(90deg, var(--naestagray) 25%, var(--naestagray-deep) 50%, var(--naestagray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
+.hero-media.is-loaded { animation: none; background: none; }
 .hero-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: grayscale(1) contrast(1.08);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
+.hero-media.is-loaded .hero-photo { opacity: 1; }
 .hero-media::after {
   content: "";
   position: absolute;
@@ -361,14 +388,27 @@ h1, h2, h3, h4, h5, h6 {
   break-inside: avoid;
   margin: 0 0 clamp(0.6rem, 1.6vw, 1.4rem);
 }
+.gallery-item:not(.placeholder) {
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(90deg, var(--naestagray) 25%, var(--naestagray-deep) 50%, var(--naestagray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+.gallery-item.is-loaded {
+  aspect-ratio: auto;
+  animation: none;
+  background: var(--black);
+}
 /* Real photographs keep their own natural aspect ratio — no cropping. */
 .gallery-item img {
   width: 100%;
   height: auto;
   display: block;
   filter: grayscale(1) contrast(1.05);
-  transition: transform 0.6s ease, filter 0.6s ease;
+  opacity: 0;
+  transition: transform 0.6s ease, filter 0.6s ease, opacity 0.5s ease;
 }
+.gallery-item.is-loaded img { opacity: 1; }
 .gallery-item:hover img {
   transform: scale(1.03);
   filter: grayscale(1) contrast(1.15);
@@ -441,13 +481,24 @@ h1, h2, h3, h4, h5, h6 {
   padding: clamp(4rem, 8vw, 7rem) var(--gutter);
   gap: clamp(2rem, 6vw, 4.5rem);
 }
+.about-media {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--naestagray) 25%, var(--naestagray-deep) 50%, var(--naestagray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+.about-media.is-loaded { animation: none; background: none; }
 .about-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 30% 25%;
   filter: grayscale(1) contrast(1.05);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
+.about-media.is-loaded img { opacity: 1; }
 .about-content { align-self: center; }
 .about-content p { color: #2a2a2a; }
 .about-more-link {
@@ -639,7 +690,11 @@ h1, h2, h3, h4, h5, h6 {
   height: 0;
   padding-top: 66.67%; /* fixed 3:2 landscape, independent of `aspect-ratio` support */
   box-shadow: -8px 0 0 var(--naestablue-deep), 0 25px 50px -12px rgba(0,0,0,0.45);
+  background: linear-gradient(90deg, var(--naestagray) 25%, var(--naestagray-deep) 50%, var(--naestagray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
+.book-cover.is-loaded { animation: none; background: none; }
 .book-cover img {
   position: absolute;
   inset: 0;
@@ -648,7 +703,10 @@ h1, h2, h3, h4, h5, h6 {
   object-fit: cover;
   filter: grayscale(1) contrast(1.1) brightness(0.85);
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
+.book-cover.is-loaded img { opacity: 1; }
 .book-cover-type {
   position: absolute;
   inset: 0;

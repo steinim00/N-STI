@@ -26,6 +26,18 @@
     });
   });
 
+  /* Skeleton loading — mark a photo's container "is-loaded" once its <img>
+     has actually decoded (or immediately if it was already cached). */
+  var markLoadedWhenReady = function (img, container) {
+    var reveal = function () { container.classList.add("is-loaded"); };
+    if (img.complete && img.naturalWidth > 0) {
+      reveal();
+    } else {
+      img.addEventListener("load", reveal);
+      img.addEventListener("error", reveal);
+    }
+  };
+
   var buildGalleryItem = function (photoIndex) {
     var photo = photos[photoIndex];
     var fig = document.createElement("button");
@@ -38,6 +50,7 @@
     img.src = photo.src;
     img.alt = photo.alt;
     img.loading = "lazy";
+    markLoadedWhenReady(img, fig);
 
     var veil = document.createElement("span");
     veil.className = "item-veil";
@@ -79,6 +92,11 @@
       });
     }
   }
+
+  document.querySelectorAll(".hero-media, .about-media, .book-cover").forEach(function (container) {
+    var img = container.querySelector("img");
+    if (img) markLoadedWhenReady(img, container);
+  });
 
   /* Lightbox */
   var lightbox = document.getElementById("lightbox");
