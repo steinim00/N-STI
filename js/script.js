@@ -281,23 +281,35 @@
       heroTitle.style.top = flightStart.top + "px";
       heroTitle.style.left = flightStart.left + "px";
       heroTitle.style.width = flightStart.width + "px";
-      // The scroll position at which the title's natural top edge would
-      // pass behind the fixed header — i.e. the moment it goes out of view.
-      headerSolidThreshold = Math.max(0, flightStart.top - header.getBoundingClientRect().height);
+      // The scroll position at which the title's natural BOTTOM edge would
+      // pass behind the fixed header — i.e. the moment it's fully gone,
+      // not just starting to duck behind it.
+      headerSolidThreshold = Math.max(0, flightStart.bottom - header.getBoundingClientRect().height);
     };
+
+    var wasDocked = null;
 
     var applyFlight = function () {
       if (!flightStart || !flightEnd) return;
       var docked = window.scrollY >= headerSolidThreshold;
+      var justChanged = docked !== wasDocked;
+
+      // Only the moment it crosses the docked/undocked boundary gets the
+      // eased snap; every other update this same frame-loop is just the
+      // title tracking scroll 1:1 like ordinary page content, which must
+      // stay untransitioned or it'll lag behind and rubber-band.
+      heroTitle.style.transition = justChanged ? "" : "none";
+
       if (docked) {
         var dx = flightEnd.left - flightStart.left;
         var dy = flightEnd.top - flightStart.top;
         var scale = flightEnd.height / flightStart.height;
         heroTitle.style.transform = "translate(" + dx + "px, " + dy + "px) scale(" + scale + ")";
       } else {
-        heroTitle.style.transform = "none";
+        heroTitle.style.transform = "translateY(" + (-window.scrollY) + "px)";
       }
       heroTitle.classList.toggle("is-docked", docked);
+      wasDocked = docked;
     };
 
     var initFlight = function () {
