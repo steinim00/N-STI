@@ -152,12 +152,80 @@
   /* Sticky header state */
   var header = document.getElementById("siteHeader");
   var navToggle = document.getElementById("navToggle");
+  var HEADER_SOLID_THRESHOLD = 220; // kept in sync with the hero-title flight below
   function updateHeader() {
-    if (window.scrollY > 40) header.classList.add("scrolled");
+    if (window.scrollY >= HEADER_SOLID_THRESHOLD) header.classList.add("scrolled");
     else header.classList.remove("scrolled");
   }
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
+
+  /* Hero title "flies" from its big centered spot into the header's brand
+     slot as the page scrolls — one and the same element the whole way,
+     not a second logo fading in beside it. Index-page only.
+
+     A same-class, invisible clone stays behind in the hero's normal flow
+     purely to hold that layout space and to measure the "start" rect from
+     (always accurate at any viewport width, since it shares the exact
+     responsive font-size rules). The real, visible <h1> is reparented to
+     <body> and driven with position:fixed — reparenting is what lets its
+     z-index be compared directly against the header instead of getting
+     trapped inside .hero-overlay's own stacking context. */
+  var heroTitle = document.getElementById("heroTitle");
+  var brandWordTarget = document.getElementById("brandWordTarget");
+  if (heroTitle && brandWordTarget) {
+    var heroTitleSpacer = heroTitle.cloneNode(true);
+    heroTitleSpacer.removeAttribute("id");
+    heroTitleSpacer.setAttribute("aria-hidden", "true");
+    heroTitleSpacer.style.visibility = "hidden";
+    heroTitle.parentNode.insertBefore(heroTitleSpacer, heroTitle);
+
+    heroTitle.style.position = "fixed";
+    heroTitle.style.margin = "0";
+    heroTitle.style.transformOrigin = "top left";
+    heroTitle.style.zIndex = "150";
+    heroTitle.style.pointerEvents = "none";
+    document.body.appendChild(heroTitle);
+
+    var flightStart = null;
+    var flightEnd = null;
+
+    var measureFlight = function () {
+      flightStart = heroTitleSpacer.getBoundingClientRect();
+      flightEnd = brandWordTarget.getBoundingClientRect();
+      heroTitle.style.top = flightStart.top + "px";
+      heroTitle.style.left = flightStart.left + "px";
+      heroTitle.style.width = flightStart.width + "px";
+    };
+
+    var applyFlight = function () {
+      if (!flightStart || !flightEnd) return;
+      var progress = Math.min(1, Math.max(0, window.scrollY / HEADER_SOLID_THRESHOLD));
+      var dx = flightEnd.left - flightStart.left;
+      var dy = flightEnd.top - flightStart.top;
+      var scale = 1 + (flightEnd.height / flightStart.height - 1) * progress;
+      heroTitle.style.transform =
+        "translate(" + dx * progress + "px, " + dy * progress + "px) scale(" + scale + ")";
+      heroTitle.classList.toggle("is-docked", progress >= 1);
+    };
+
+    var initFlight = function () {
+      measureFlight();
+      applyFlight();
+    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(initFlight);
+    } else {
+      initFlight();
+    }
+
+    window.addEventListener("scroll", applyFlight, { passive: true });
+    window.addEventListener("resize", function () {
+      measureFlight();
+      applyFlight();
+    });
+  }
 
   /* Mobile nav */
   var siteNav = document.getElementById("siteNav");
