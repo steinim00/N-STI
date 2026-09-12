@@ -281,10 +281,14 @@
       heroTitle.style.top = flightStart.top + "px";
       heroTitle.style.left = flightStart.left + "px";
       heroTitle.style.width = flightStart.width + "px";
-      // The scroll position at which the title's natural BOTTOM edge would
-      // pass behind the fixed header — i.e. the moment it's fully gone,
-      // not just starting to duck behind it.
-      headerSolidThreshold = Math.max(0, flightStart.bottom - header.getBoundingClientRect().height);
+      // The scroll position at which the title's natural top edge would
+      // start passing behind the fixed header. Using the bottom edge
+      // instead (wait for it to be *fully* gone) sounds more correct on
+      // paper, but by then there's nothing left on screen to visibly snap
+      // — the whole point of the motion is that the still-fully-visible
+      // title suddenly shrinks into the corner right as it would start
+      // disappearing, not that it reappears from nothing.
+      headerSolidThreshold = Math.max(0, flightStart.top - header.getBoundingClientRect().height);
     };
 
     var wasDocked = null;
