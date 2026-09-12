@@ -7,28 +7,65 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* The old page just holds still and gets covered — it's the camera body,
-     not the thing in motion. */
-  ::view-transition-old(root) {
-    animation: none;
-    z-index: 1;
-  }
-  /* The new page slides down and out from above like a print easing out of
-     a Polaroid's slot: fast to start, a soft mechanical settle at the end
-     instead of stopping dead. A drop shadow gives it some physical weight
-     as it slides over the old page underneath. */
-  ::view-transition-new(root) {
-    animation: polaroid-print-out 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-    box-shadow: 0 25px 45px -10px rgba(0,0,0,0.45);
-    z-index: 2;
+  /* Both pages are clipped through a 9-sided camera aperture. The old page's
+     blades snap shut over it first; once it's fully closed the new page's
+     blades snap open to reveal it — same shape, same center, just reversed. */
+  ::view-transition-image-pair(root) {
+    background: var(--black);
   }
 
-  @keyframes polaroid-print-out {
+  ::view-transition-old(root) {
+    animation: aperture-close 0.4s cubic-bezier(0.6, 0, 0.8, 0.2) both;
+    z-index: 2;
+  }
+  ::view-transition-new(root) {
+    animation: aperture-open 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) 0.4s both;
+    z-index: 1;
+  }
+
+  /* 9-blade aperture shape, vertices on a circle of radius 150vmin (well
+     past any viewport corner) collapsing to/from a single point at center. */
+  @keyframes aperture-close {
     from {
-      transform: translateY(-100%);
+      clip-path: polygon(
+        calc(50% + 0vmin) calc(50% - 150vmin),
+        calc(50% + 96.42vmin) calc(50% - 114.91vmin),
+        calc(50% + 147.72vmin) calc(50% - 26.05vmin),
+        calc(50% + 129.9vmin) calc(50% + 75vmin),
+        calc(50% + 51.3vmin) calc(50% + 140.95vmin),
+        calc(50% - 51.3vmin) calc(50% + 140.95vmin),
+        calc(50% - 129.9vmin) calc(50% + 75vmin),
+        calc(50% - 147.72vmin) calc(50% - 26.05vmin),
+        calc(50% - 96.42vmin) calc(50% - 114.91vmin)
+      );
     }
     to {
-      transform: translateY(0);
+      clip-path: polygon(
+        50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
+        50% 50%, 50% 50%, 50% 50%, 50% 50%
+      );
+    }
+  }
+
+  @keyframes aperture-open {
+    from {
+      clip-path: polygon(
+        50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
+        50% 50%, 50% 50%, 50% 50%, 50% 50%
+      );
+    }
+    to {
+      clip-path: polygon(
+        calc(50% + 0vmin) calc(50% - 150vmin),
+        calc(50% + 96.42vmin) calc(50% - 114.91vmin),
+        calc(50% + 147.72vmin) calc(50% - 26.05vmin),
+        calc(50% + 129.9vmin) calc(50% + 75vmin),
+        calc(50% + 51.3vmin) calc(50% + 140.95vmin),
+        calc(50% - 51.3vmin) calc(50% + 140.95vmin),
+        calc(50% - 129.9vmin) calc(50% + 75vmin),
+        calc(50% - 147.72vmin) calc(50% - 26.05vmin),
+        calc(50% - 96.42vmin) calc(50% - 114.91vmin)
+      );
     }
   }
 }
