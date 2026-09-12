@@ -7,29 +7,45 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* The old page gets blown out by the "flash" and held there while the
+     new page fades in underneath, already just as overexposed — so the
+     flash reads as one continuous camera-flash moment, not a cut. */
   ::view-transition-old(root) {
-    animation: polaroid-slide-out 0.45s ease-in both;
+    animation: polaroid-flash-out 0.35s ease-out both;
   }
+  /* The new page then "develops": it emerges overexposed and washed out,
+     like a fresh Polaroid print, and gradually resolves into full
+     contrast and colour as the flash fades and the image develops. */
   ::view-transition-new(root) {
-    animation: polaroid-slide-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: polaroid-develop-in 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
   }
 
-  @keyframes polaroid-slide-out {
-    to {
+  @keyframes polaroid-flash-out {
+    0% {
+      opacity: 1;
+      filter: brightness(1) contrast(1);
+    }
+    20% {
+      opacity: 1;
+      filter: brightness(4.5) contrast(0.6);
+    }
+    100% {
       opacity: 0;
-      transform: scale(0.95) rotate(1.5deg);
+      filter: brightness(4.5) contrast(0.6);
     }
   }
-  @keyframes polaroid-slide-in {
-    from {
+  @keyframes polaroid-develop-in {
+    0% {
       opacity: 0;
-      transform: scale(0.9) rotate(-3deg) translateY(28px);
-      box-shadow: 0 30px 60px -10px rgba(0,0,0,0.4);
+      filter: brightness(4.5) contrast(0.6) saturate(0.4);
     }
-    to {
+    12% {
       opacity: 1;
-      transform: scale(1) rotate(0deg) translateY(0);
-      box-shadow: 0 0 0 rgba(0,0,0,0);
+      filter: brightness(4.5) contrast(0.6) saturate(0.4);
+    }
+    100% {
+      opacity: 1;
+      filter: brightness(1) contrast(1) saturate(1);
     }
   }
 }
