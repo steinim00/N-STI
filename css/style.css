@@ -295,7 +295,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--white);
   text-align: center;
   will-change: transform;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.3s ease;
 }
 .hero-title.is-docked { color: var(--black); }
 .hero-tagline {

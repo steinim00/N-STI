@@ -217,17 +217,20 @@
   /* Sticky header state */
   var header = document.getElementById("siteHeader");
   var navToggle = document.getElementById("navToggle");
-  var HEADER_SOLID_THRESHOLD = 220; // kept in sync with the hero-title flight below
+  var headerSolidThreshold = 40; // overridden below on the index page, once the hero title's own out-of-view point is known
   function updateHeader() {
-    if (window.scrollY >= HEADER_SOLID_THRESHOLD) header.classList.add("scrolled");
+    if (window.scrollY >= headerSolidThreshold) header.classList.add("scrolled");
     else header.classList.remove("scrolled");
   }
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
 
-  /* Hero title "flies" from its big centered spot into the header's brand
-     slot as the page scrolls — one and the same element the whole way,
-     not a second logo fading in beside it. Index-page only.
+  /* Hero title snaps from its big centered spot into the header's brand
+     slot the instant it scrolls out of view behind the header — one and
+     the same element the whole way, not a second logo fading in beside
+     it. A quick CSS transition on .hero-title does the actual snapping;
+     this just flips a class at the right moment rather than scrubbing
+     the position continuously with scroll. Index-page only.
 
      A same-class, invisible clone stays behind in the hero's normal flow
      purely to hold that layout space and to measure the "start" rect from
@@ -261,21 +264,28 @@
       heroTitle.style.top = flightStart.top + "px";
       heroTitle.style.left = flightStart.left + "px";
       heroTitle.style.width = flightStart.width + "px";
+      // The scroll position at which the title's natural top edge would
+      // pass behind the fixed header — i.e. the moment it goes out of view.
+      headerSolidThreshold = Math.max(0, flightStart.top - header.getBoundingClientRect().height);
     };
 
     var applyFlight = function () {
       if (!flightStart || !flightEnd) return;
-      var progress = Math.min(1, Math.max(0, window.scrollY / HEADER_SOLID_THRESHOLD));
-      var dx = flightEnd.left - flightStart.left;
-      var dy = flightEnd.top - flightStart.top;
-      var scale = 1 + (flightEnd.height / flightStart.height - 1) * progress;
-      heroTitle.style.transform =
-        "translate(" + dx * progress + "px, " + dy * progress + "px) scale(" + scale + ")";
-      heroTitle.classList.toggle("is-docked", progress >= 1);
+      var docked = window.scrollY >= headerSolidThreshold;
+      if (docked) {
+        var dx = flightEnd.left - flightStart.left;
+        var dy = flightEnd.top - flightStart.top;
+        var scale = flightEnd.height / flightStart.height;
+        heroTitle.style.transform = "translate(" + dx + "px, " + dy + "px) scale(" + scale + ")";
+      } else {
+        heroTitle.style.transform = "none";
+      }
+      heroTitle.classList.toggle("is-docked", docked);
     };
 
     var initFlight = function () {
       measureFlight();
+      updateHeader();
       applyFlight();
     };
 
@@ -285,9 +295,13 @@
       initFlight();
     }
 
-    window.addEventListener("scroll", applyFlight, { passive: true });
+    window.addEventListener("scroll", function () {
+      updateHeader();
+      applyFlight();
+    }, { passive: true });
     window.addEventListener("resize", function () {
       measureFlight();
+      updateHeader();
       applyFlight();
     });
   }
