@@ -648,6 +648,21 @@
     var apertureBlades = apertureOverlay.querySelectorAll(".blade");
     var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
 
+    // The very first time a visitor's browser loads the homepage, the
+    // opening sweep runs slower (1s) so it reads as a proper entrance
+    // rather than a quick flourish. Every other load — including later
+    // visits to index.html itself — uses the normal, snappier duration.
+    var FIRST_INDEX_FLAG = "naestiIndexVisited";
+    var pathname = window.location.pathname;
+    var isIndexPage = pathname === "/" || pathname === "" || /\/index\.html$/.test(pathname);
+    var openTransition = ROTATE_TRANSITION;
+    var openDuration = APERTURE_DURATION;
+    if (isIndexPage && !localStorage.getItem(FIRST_INDEX_FLAG)) {
+      openTransition = "transform 1s ease-in-out";
+      openDuration = 1000;
+    }
+    if (isIndexPage) localStorage.setItem(FIRST_INDEX_FLAG, "1");
+
     // Every page load starts fully closed and opaque, then sweeps the
     // blades open — whether this load followed a navigation we intercepted
     // or the visitor arrived directly (typed URL, refresh, first visit).
@@ -662,14 +677,14 @@
     void apertureOverlay.offsetHeight;
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
-        apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+        apertureBlades.forEach(function (blade) { blade.style.transition = openTransition; });
         apertureOverlay.classList.add("is-open");
       });
     });
     window.setTimeout(function () {
       apertureOverlay.style.transition = "none";
       apertureOverlay.classList.remove("is-visible");
-    }, APERTURE_DURATION + 60);
+    }, openDuration + 60);
 
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
