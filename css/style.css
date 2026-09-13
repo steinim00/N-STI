@@ -26,22 +26,25 @@
   overflow: visible;
 }
 /* Each blade is a pie-slice from its own pivot (fixed on the rim) through
-   the center to the next blade's pivot. At rotate(0) all 9 tile the disc
-   exactly with no gaps — a solid closed shutter. Rotating them all by the
-   same angle about their own pivots swings the shared vertices away from
-   center, opening a 9-pointed hole while the pivots stay put on the rim.
-   The transition itself is driven from JS (script.js), which needs
-   different timing for closing vs. opening, so no transition is baked in
-   here beyond the resting transform. */
+   the center to the next blade's pivot. At rotate(0) scale(1) all 9 tile
+   the disc exactly with no gaps — a solid closed shutter. Rotating them
+   all by the same angle about their own pivots swings the shared vertices
+   away from center, opening a 9-pointed hole while the pivots stay put on
+   the rim — and shrinking them toward those same (off-screen) pivots at
+   the same time means the open state genuinely vanishes rather than
+   leaving visible blade tips in frame. The transition itself is driven
+   from JS (script.js), which needs different timing for closing vs.
+   opening, so no transition is baked in here beyond the resting
+   transform. */
 .aperture-overlay .blade {
   fill: var(--black);
   stroke: rgba(255, 255, 255, 0.1);
   stroke-width: 0.6;
   transform-box: view-box;
-  transform: rotate(0deg);
+  transform: rotate(0deg) scale(1);
 }
 .aperture-overlay.is-open .blade {
-  transform: rotate(50deg);
+  transform: rotate(50deg) scale(0);
 }
 
 /* ============================================================
