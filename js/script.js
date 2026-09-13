@@ -626,7 +626,6 @@
      page loads underneath, then sweeps open to reveal it — see the CSS
      comment above .aperture-overlay for how the blade geometry works. */
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var APERTURE_FLAG = "naestiApertureEnter";
     var APERTURE_DURATION = 400;
 
     var apertureOverlay = document.createElement("div");
@@ -649,28 +648,26 @@
     var apertureBlades = apertureOverlay.querySelectorAll(".blade");
     var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
 
-    // Arriving from a navigation we intercepted: start fully closed and
-    // opaque (where the previous page left off, mid-click), then sweep the
-    // blades back open. The overlay stays fully opaque throughout most of
-    // that rotation — the growing 9-pointed hole is what reveals the page,
-    // not the overlay fading — and only fades out right at the end to
-    // clean up the blade tips a real iris can't retract fully out of view.
-    if (sessionStorage.getItem(APERTURE_FLAG)) {
-      sessionStorage.removeItem(APERTURE_FLAG);
-      apertureOverlay.style.transition = "none";
-      apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
-      apertureOverlay.classList.remove("is-open");
-      apertureOverlay.classList.add("is-visible");
-      void apertureOverlay.offsetHeight;
+    // Every page load starts fully closed and opaque, then sweeps the
+    // blades open — whether this load followed a navigation we intercepted
+    // or the visitor arrived directly (typed URL, refresh, first visit).
+    // The overlay stays fully opaque throughout most of that rotation —
+    // the growing 9-pointed hole is what reveals the page, not the overlay
+    // fading — and only fades out right at the end to clean up the blade
+    // tips a real iris can't retract fully out of view.
+    apertureOverlay.style.transition = "none";
+    apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+    apertureOverlay.classList.remove("is-open");
+    apertureOverlay.classList.add("is-visible");
+    void apertureOverlay.offsetHeight;
+    window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
-        window.requestAnimationFrame(function () {
-          apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
-          apertureOverlay.style.transition = "opacity 0.15s ease-out 0.25s";
-          apertureOverlay.classList.add("is-open");
-          apertureOverlay.classList.remove("is-visible");
-        });
+        apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+        apertureOverlay.style.transition = "opacity 0.15s ease-out 0.25s";
+        apertureOverlay.classList.add("is-open");
+        apertureOverlay.classList.remove("is-visible");
       });
-    }
+    });
 
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -696,7 +693,6 @@
       apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
       apertureOverlay.classList.remove("is-open");
       window.setTimeout(function () {
-        sessionStorage.setItem(APERTURE_FLAG, "1");
         window.location.href = link.href;
       }, APERTURE_DURATION);
     });
