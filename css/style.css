@@ -38,8 +38,8 @@
    transform. */
 .aperture-overlay .blade {
   fill: var(--black);
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 0.6;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.8;
   transform-box: view-box;
   transform: rotate(0deg) scale(1);
 }
