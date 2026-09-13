@@ -656,4 +656,85 @@
       });
     }
   }
+
+  /* ---------------- Page-transition aperture overlay ---------------- */
+  /* A 9-blade iris overlay covers the page on click, holds while the next
+     page loads underneath, then sweeps open to reveal it — see the CSS
+     comment above .aperture-overlay for how the blade geometry works. */
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var APERTURE_FLAG = "naestiApertureEnter";
+    var APERTURE_DURATION = 400;
+
+    var apertureOverlay = document.createElement("div");
+    apertureOverlay.className = "aperture-overlay is-open";
+    apertureOverlay.setAttribute("aria-hidden", "true");
+    apertureOverlay.innerHTML =
+      '<svg viewBox="0 0 200 200">' +
+      '<polygon class="blade" points="100.00,0.00 100,100 164.28,23.40" style="transform-origin:100.00px 0.00px"/>' +
+      '<polygon class="blade" points="164.28,23.40 100,100 198.48,82.64" style="transform-origin:164.28px 23.40px"/>' +
+      '<polygon class="blade" points="198.48,82.64 100,100 186.60,150.00" style="transform-origin:198.48px 82.64px"/>' +
+      '<polygon class="blade" points="186.60,150.00 100,100 134.20,193.97" style="transform-origin:186.60px 150.00px"/>' +
+      '<polygon class="blade" points="134.20,193.97 100,100 65.80,193.97" style="transform-origin:134.20px 193.97px"/>' +
+      '<polygon class="blade" points="65.80,193.97 100,100 13.40,150.00" style="transform-origin:65.80px 193.97px"/>' +
+      '<polygon class="blade" points="13.40,150.00 100,100 1.52,82.64" style="transform-origin:13.40px 150.00px"/>' +
+      '<polygon class="blade" points="1.52,82.64 100,100 35.72,23.40" style="transform-origin:1.52px 82.64px"/>' +
+      '<polygon class="blade" points="35.72,23.40 100,100 100.00,0.00" style="transform-origin:35.72px 23.40px"/>' +
+      "</svg>";
+    document.body.appendChild(apertureOverlay);
+
+    var apertureBlades = apertureOverlay.querySelectorAll(".blade");
+    var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
+
+    // Arriving from a navigation we intercepted: start fully closed and
+    // opaque (where the previous page left off, mid-click), then sweep the
+    // blades back open. The overlay stays fully opaque throughout most of
+    // that rotation — the growing 9-pointed hole is what reveals the page,
+    // not the overlay fading — and only fades out right at the end to
+    // clean up the blade tips a real iris can't retract fully out of view.
+    if (sessionStorage.getItem(APERTURE_FLAG)) {
+      sessionStorage.removeItem(APERTURE_FLAG);
+      apertureOverlay.style.transition = "none";
+      apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+      apertureOverlay.classList.remove("is-open");
+      apertureOverlay.classList.add("is-visible");
+      void apertureOverlay.offsetHeight;
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+          apertureOverlay.style.transition = "opacity 0.15s ease-out 0.25s";
+          apertureOverlay.classList.add("is-open");
+          apertureOverlay.classList.remove("is-visible");
+        });
+      });
+    }
+
+    document.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var link = e.target.closest("a[href]");
+      if (!link || (link.target && link.target !== "_self")) return;
+      var url;
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch (err) {
+        return;
+      }
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname === window.location.pathname && url.hash) return;
+
+      e.preventDefault();
+      // Closing: snap the overlay opaque instantly (its own content is just
+      // the blade shapes, so there's nothing to fade in) and let the blade
+      // rotation itself — visible from frame one — be the entire motion.
+      apertureOverlay.style.transition = "none";
+      apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+      apertureOverlay.classList.add("is-visible");
+      void apertureOverlay.offsetHeight;
+      apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+      apertureOverlay.classList.remove("is-open");
+      window.setTimeout(function () {
+        sessionStorage.setItem(APERTURE_FLAG, "1");
+        window.location.href = link.href;
+      }, APERTURE_DURATION);
+    });
+  }
 })();
