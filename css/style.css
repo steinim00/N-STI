@@ -130,7 +130,6 @@ h1, h2, h3, h4, h5, h6 {
   top: 0; left: 0; right: 0;
   z-index: 100;
   padding: 1.1rem var(--gutter);
-  overflow: hidden;
   transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
 }
 .site-header.scrolled {
@@ -150,28 +149,6 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-}
-
-/* Click "reveal" on a nav link: a naestablue circle grows from the click
-   point until it covers the whole header, clipped by .site-header's own
-   overflow:hidden. Sits behind .header-inner so the labels stay readable. */
-.header-ripple {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 24px;
-  margin: -12px 0 0 -12px;
-  border-radius: 50%;
-  background: var(--naestablue);
-  transform: scale(0);
-  transform-origin: center;
-  transition: transform 0.5s ease-out;
-  z-index: 1;
-  pointer-events: none;
-}
-.header-ripple.is-active {
-  transform: scale(var(--ripple-scale, 60));
 }
 
 .brand-mark {
@@ -646,7 +623,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: var(--container);
   margin: 0 auto;
   padding: clamp(4rem, 8vw, 7rem) var(--gutter);
-  gap: clamp(2rem, 6vw, 4.5rem);
+  gap: clamp(1.2rem, 3vw, 2.2rem);
 }
 .about-media {
   position: relative;

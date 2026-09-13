@@ -356,42 +356,6 @@
     });
   });
 
-  /* Nav-link click reveal: a naestablue circle grows from the click point
-     to cover the whole header. Resets itself afterwards so it's ready
-     again for an in-page anchor link that doesn't actually navigate away. */
-  var headerRipple = document.createElement("div");
-  headerRipple.className = "header-ripple";
-  headerRipple.setAttribute("aria-hidden", "true");
-  header.appendChild(headerRipple);
-
-  siteNav.querySelectorAll("a").forEach(function (a) {
-    a.addEventListener("click", function (e) {
-      var headerRect = header.getBoundingClientRect();
-      var x = e.clientX - headerRect.left;
-      var y = e.clientY - headerRect.top;
-      var maxDist = Math.max(
-        Math.hypot(x, y),
-        Math.hypot(headerRect.width - x, y),
-        Math.hypot(x, headerRect.height - y),
-        Math.hypot(headerRect.width - x, headerRect.height - y)
-      );
-
-      headerRipple.style.transition = "none";
-      headerRipple.classList.remove("is-active");
-      headerRipple.style.left = x + "px";
-      headerRipple.style.top = y + "px";
-      headerRipple.style.setProperty("--ripple-scale", (maxDist / 12) + "");
-      void headerRipple.offsetWidth; // force layout before re-enabling the transition
-      headerRipple.style.transition = "";
-      headerRipple.classList.add("is-active");
-
-      window.clearTimeout(headerRipple._resetTimer);
-      headerRipple._resetTimer = window.setTimeout(function () {
-        headerRipple.classList.remove("is-active");
-      }, 900);
-    });
-  });
-
   /* Footer year */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
