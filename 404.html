@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Síða fannst ekki — NÆSTI</title>
+<meta name="description" content="Þessi síða er ekki til hjá Næsta — kannski var ljósopið aðeins of lokað.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cart-trolley-icon" viewBox="0 0 24 24">
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="9" cy="21" r="1.4" fill="currentColor"/>
+    <circle cx="19" cy="21" r="1.4" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<a class="skip-link" href="#not-found">Fara í efni</a>
+
+<header class="site-header site-header--solid" id="siteHeader">
+  <div class="header-inner">
+    <a href="index.html" class="brand-mark" aria-label="Næsti - forsíða">
+      <span class="brand-word">Næsti</span>
+    </a>
+    <div class="nav-cluster">
+      <nav class="site-nav" id="siteNav">
+        <a href="myndir.html">Myndir</a>
+        <a href="bokin.html">Bókin</a>
+        <a href="um-naesta.html">Um Næsta</a>
+        <a href="index.html#sizes">Stærðir</a>
+        <a href="hafa-samband.html">Hafa samband</a>
+      </nav>
+      <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa">
+        <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </a>
+      <button class="nav-toggle is-dark" id="navToggle" aria-label="Opna valmynd" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="not-found" id="not-found">
+    <div class="not-found-aperture" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <circle class="not-found-aperture-rim" cx="100" cy="100" r="99"/>
+        <polygon class="blade" points="100.00,0.00 100,100 164.28,23.40" style="transform-origin:100.00px 0.00px"/>
+        <polygon class="blade" points="164.28,23.40 100,100 198.48,82.64" style="transform-origin:164.28px 23.40px"/>
+        <polygon class="blade" points="198.48,82.64 100,100 186.60,150.00" style="transform-origin:198.48px 82.64px"/>
+        <polygon class="blade" points="186.60,150.00 100,100 134.20,193.97" style="transform-origin:186.60px 150.00px"/>
+        <polygon class="blade" points="134.20,193.97 100,100 65.80,193.97" style="transform-origin:134.20px 193.97px"/>
+        <polygon class="blade" points="65.80,193.97 100,100 13.40,150.00" style="transform-origin:65.80px 193.97px"/>
+        <polygon class="blade" points="13.40,150.00 100,100 1.52,82.64" style="transform-origin:13.40px 150.00px"/>
+        <polygon class="blade" points="1.52,82.64 100,100 35.72,23.40" style="transform-origin:1.52px 82.64px"/>
+        <polygon class="blade" points="35.72,23.40 100,100 100.00,0.00" style="transform-origin:35.72px 23.40px"/>
+      </svg>
+    </div>
+    <p class="section-eyebrow">Villa 404</p>
+    <h1 class="not-found-heading">Ekkert í fókus</h1>
+    <p class="not-found-text">Þessi síða er ekki til, eða hefur dottið út fyrir myndrammann.
+      Kannski var ljósopið aðeins of lokað.</p>
+    <a href="index.html" class="not-found-link">Til baka á forsíðu</a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a href="index.html" class="brand-mark brand-mark--footer" aria-label="Næsti - forsíða">
+      <span class="brand-word">Næsti</span>
+    </a>
+    <p class="footer-tagline">Unaður fyrir augun</p>
+    <p class="footer-copy">&copy; <span id="year"></span> Næsti. Öll réttindi áskilin.</p>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

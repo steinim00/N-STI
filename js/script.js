@@ -713,5 +713,59 @@
         window.location.href = link.href;
       }, APERTURE_DURATION);
     });
+
+    // "Stærðir" jumps to a same-page section — no navigation, just a scroll.
+    // That section sits on a white background, so play the same aperture
+    // close/open in white instead of black, and slower/calmer than the
+    // snappy page-to-page transition, since it's just repositioning the
+    // scroll rather than swapping out the whole page.
+    var SIZES_TRANSITION = "transform 0.8s ease-in-out";
+    var SIZES_DURATION = 800;
+    document.querySelectorAll('a[href$="#sizes"]').forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var url;
+        try {
+          url = new URL(link.href, window.location.href);
+        } catch (err) {
+          return;
+        }
+        if (url.origin !== window.location.origin || url.pathname !== window.location.pathname) return;
+        var target = document.getElementById(url.hash.slice(1));
+        if (!target) return;
+
+        e.preventDefault();
+        var html = document.documentElement;
+        var prevScrollBehavior = html.style.scrollBehavior;
+
+        apertureOverlay.classList.add("is-light-theme");
+        apertureOverlay.style.transition = "none";
+        apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+        apertureOverlay.classList.add("is-visible");
+        void apertureOverlay.offsetHeight;
+        apertureBlades.forEach(function (blade) { blade.style.transition = SIZES_TRANSITION; });
+        apertureOverlay.classList.remove("is-open");
+
+        window.setTimeout(function () {
+          html.style.scrollBehavior = "auto";
+          target.scrollIntoView({ block: "start" });
+          html.style.scrollBehavior = prevScrollBehavior;
+
+          apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+          void apertureOverlay.offsetHeight;
+          window.requestAnimationFrame(function () {
+            window.requestAnimationFrame(function () {
+              apertureBlades.forEach(function (blade) { blade.style.transition = SIZES_TRANSITION; });
+              apertureOverlay.classList.add("is-open");
+            });
+          });
+          window.setTimeout(function () {
+            apertureOverlay.style.transition = "none";
+            apertureOverlay.classList.remove("is-visible");
+            apertureOverlay.classList.remove("is-light-theme");
+          }, SIZES_DURATION + 60);
+        }, SIZES_DURATION);
+      });
+    });
   }
 })();
