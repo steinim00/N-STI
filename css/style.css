@@ -1,130 +1,47 @@
 /* ---------------- Page transitions ---------------- */
-/* Opts every same-origin navigation between pages into the browser's
-   cross-document View Transition API. No-op (plain navigation) in
-   browsers that don't support it yet. */
-@view-transition {
-  navigation: auto;
+/* A 9-blade camera-iris overlay plays over same-origin navigations: on click
+   the blades sweep shut over the current page, then the destination page
+   loads underneath while still hidden, and its blades sweep back open. Real
+   iris blades pivot at a fixed point on the rim rather than scaling a shape
+   in place, so the opening spirals through the same pinwheel silhouette a
+   real aperture makes (see js/script.js for the choreography). No-op when
+   JS is unavailable, and skipped entirely under reduced motion. */
+.aperture-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  /* Both pages are clipped through a 9-sided camera aperture. The old page's
-     blades snap shut over it first; once it's fully closed the new page's
-     blades snap open to reveal it — same shape, same center, just reversed. */
-  ::view-transition-image-pair(root) {
-    background: var(--black);
-  }
-
-  ::view-transition-old(root) {
-    animation: aperture-close 0.5s linear both;
-    z-index: 2;
-  }
-  ::view-transition-new(root) {
-    animation: aperture-open 0.5s linear 0.5s both;
-    z-index: 1;
-  }
-
-  /* Real iris blades don't just shrink a fixed shape — as they slide shut
-     each blade also rotates about its pivot, so the opening spirals inward
-     rather than scaling down in place. These steps shrink the 9-point
-     polygon's radius from 150vmin (past any viewport corner) to 0 while
-     rotating it ~40°, so the intermediate frames trace that same twist. */
-  @keyframes aperture-close {
-    0% {
-      clip-path: polygon(
-        calc(50% + 0vmin) calc(50% - 150vmin),
-        calc(50% + 96.42vmin) calc(50% - 114.91vmin),
-        calc(50% + 147.72vmin) calc(50% - 26.05vmin),
-        calc(50% + 129.9vmin) calc(50% + 75vmin),
-        calc(50% + 51.3vmin) calc(50% + 140.95vmin),
-        calc(50% - 51.3vmin) calc(50% + 140.95vmin),
-        calc(50% - 129.9vmin) calc(50% + 75vmin),
-        calc(50% - 147.72vmin) calc(50% - 26.05vmin),
-        calc(50% - 96.42vmin) calc(50% - 114.91vmin)
-      );
-    }
-    40% {
-      clip-path: polygon(
-        calc(50% + 22.98vmin) calc(50% - 92.18vmin),
-        calc(50% + 76.86vmin) calc(50% - 55.84vmin),
-        calc(50% + 94.77vmin) calc(50% + 6.63vmin),
-        calc(50% + 68.34vmin) calc(50% + 65.99vmin),
-        calc(50% + 9.93vmin) calc(50% + 94.48vmin),
-        calc(50% - 53.12vmin) calc(50% + 78.76vmin),
-        calc(50% - 91.32vmin) calc(50% + 26.19vmin),
-        calc(50% - 86.79vmin) calc(50% - 38.64vmin),
-        calc(50% - 41.65vmin) calc(50% - 85.39vmin)
-      );
-    }
-    70% {
-      clip-path: polygon(
-        calc(50% + 18.78vmin) calc(50% - 35.32vmin),
-        calc(50% + 37.09vmin) calc(50% - 14.98vmin),
-        calc(50% + 38.04vmin) calc(50% + 12.36vmin),
-        calc(50% + 21.2vmin) calc(50% + 33.92vmin),
-        calc(50% - 5.57vmin) calc(50% + 39.61vmin),
-        calc(50% - 29.73vmin) calc(50% + 26.77vmin),
-        calc(50% - 39.98vmin) calc(50% + 1.4vmin),
-        calc(50% - 31.52vmin) calc(50% - 24.63vmin),
-        calc(50% - 8.32vmin) calc(50% - 39.13vmin)
-      );
-    }
-    100% {
-      clip-path: polygon(
-        50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
-        50% 50%, 50% 50%, 50% 50%, 50% 50%
-      );
-    }
-  }
-
-  /* Same spiral, unwinding: the new page's blades slide back open along the
-     reverse of that path rather than just growing a static shape. */
-  @keyframes aperture-open {
-    0% {
-      clip-path: polygon(
-        50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
-        50% 50%, 50% 50%, 50% 50%, 50% 50%
-      );
-    }
-    30% {
-      clip-path: polygon(
-        calc(50% + 18.78vmin) calc(50% - 35.32vmin),
-        calc(50% + 37.09vmin) calc(50% - 14.98vmin),
-        calc(50% + 38.04vmin) calc(50% + 12.36vmin),
-        calc(50% + 21.2vmin) calc(50% + 33.92vmin),
-        calc(50% - 5.57vmin) calc(50% + 39.61vmin),
-        calc(50% - 29.73vmin) calc(50% + 26.77vmin),
-        calc(50% - 39.98vmin) calc(50% + 1.4vmin),
-        calc(50% - 31.52vmin) calc(50% - 24.63vmin),
-        calc(50% - 8.32vmin) calc(50% - 39.13vmin)
-      );
-    }
-    60% {
-      clip-path: polygon(
-        calc(50% + 22.98vmin) calc(50% - 92.18vmin),
-        calc(50% + 76.86vmin) calc(50% - 55.84vmin),
-        calc(50% + 94.77vmin) calc(50% + 6.63vmin),
-        calc(50% + 68.34vmin) calc(50% + 65.99vmin),
-        calc(50% + 9.93vmin) calc(50% + 94.48vmin),
-        calc(50% - 53.12vmin) calc(50% + 78.76vmin),
-        calc(50% - 91.32vmin) calc(50% + 26.19vmin),
-        calc(50% - 86.79vmin) calc(50% - 38.64vmin),
-        calc(50% - 41.65vmin) calc(50% - 85.39vmin)
-      );
-    }
-    100% {
-      clip-path: polygon(
-        calc(50% + 0vmin) calc(50% - 150vmin),
-        calc(50% + 96.42vmin) calc(50% - 114.91vmin),
-        calc(50% + 147.72vmin) calc(50% - 26.05vmin),
-        calc(50% + 129.9vmin) calc(50% + 75vmin),
-        calc(50% + 51.3vmin) calc(50% + 140.95vmin),
-        calc(50% - 51.3vmin) calc(50% + 140.95vmin),
-        calc(50% - 129.9vmin) calc(50% + 75vmin),
-        calc(50% - 147.72vmin) calc(50% - 26.05vmin),
-        calc(50% - 96.42vmin) calc(50% - 114.91vmin)
-      );
-    }
-  }
+.aperture-overlay.is-visible {
+  opacity: 1;
+}
+.aperture-overlay svg {
+  width: 200vmax;
+  height: 200vmax;
+  display: block;
+  overflow: visible;
+}
+/* Each blade is a pie-slice from its own pivot (fixed on the rim) through
+   the center to the next blade's pivot. At rotate(0) all 9 tile the disc
+   exactly with no gaps — a solid closed shutter. Rotating them all by the
+   same angle about their own pivots swings the shared vertices away from
+   center, opening a 9-pointed hole while the pivots stay put on the rim.
+   The transition itself is driven from JS (script.js), which needs
+   different timing for closing vs. opening, so no transition is baked in
+   here beyond the resting transform. */
+.aperture-overlay .blade {
+  fill: var(--black);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 0.6;
+  transform-box: view-box;
+  transform: rotate(0deg);
+}
+.aperture-overlay.is-open .blade {
+  transform: rotate(50deg);
 }
 
 /* ============================================================
