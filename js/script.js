@@ -651,10 +651,10 @@
     // Every page load starts fully closed and opaque, then sweeps the
     // blades open — whether this load followed a navigation we intercepted
     // or the visitor arrived directly (typed URL, refresh, first visit).
-    // The overlay stays fully opaque throughout most of that rotation —
-    // the growing 9-pointed hole is what reveals the page, not the overlay
-    // fading — and only fades out right at the end to clean up the blade
-    // tips a real iris can't retract fully out of view.
+    // Each blade both rotates AND shrinks toward its own (off-screen) pivot,
+    // so at full open they've genuinely vanished rather than leaving visible
+    // tips in frame — no fade needed to paper over the difference. Once the
+    // rotation finishes, the overlay drops back to its hidden resting state.
     apertureOverlay.style.transition = "none";
     apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
     apertureOverlay.classList.remove("is-open");
@@ -663,11 +663,13 @@
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
         apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
-        apertureOverlay.style.transition = "opacity 0.15s ease-out 0.25s";
         apertureOverlay.classList.add("is-open");
-        apertureOverlay.classList.remove("is-visible");
       });
     });
+    window.setTimeout(function () {
+      apertureOverlay.style.transition = "none";
+      apertureOverlay.classList.remove("is-visible");
+    }, APERTURE_DURATION + 60);
 
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
