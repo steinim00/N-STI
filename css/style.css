@@ -1216,8 +1216,16 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 720px) {
   .site-nav {
+    /* Explicit vw/vh sizing rather than inset:0 — .site-header--solid's
+       backdrop-filter makes it a containing block for fixed descendants,
+       so inset:0 would size this to the header's own small box instead
+       of the viewport. vw/vh units aren't affected by that and always
+       resolve against the real viewport. */
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: var(--black);
     flex-direction: column;
     align-items: center;
@@ -1227,8 +1235,17 @@ h1, h2, h3, h4, h5, h6 {
     transition: transform 0.35s ease;
   }
   .site-nav.is-open { transform: translateX(0); }
-  .site-nav a { color: var(--white); font-size: 1.1rem; }
+  .site-nav a,
+  .site-header--solid .site-nav a { color: var(--white); font-size: 1.1rem; }
+  /* Once the nav is open it's a full-black overlay regardless of the header
+     style underneath, so the cart icon and toggle need to switch to white
+     too — otherwise .site-header--solid's dark styling (meant for the
+     closed, light header bar) leaves them black-on-black. */
+  .site-nav.is-open ~ .cart-link,
+  .site-header--solid .site-nav.is-open ~ .cart-link { color: var(--white); }
   .nav-toggle { display: flex; }
+  .nav-toggle.is-open span,
+  .nav-toggle.is-dark.is-open span { background: var(--white); }
   .nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
   .nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
