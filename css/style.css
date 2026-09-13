@@ -15,18 +15,21 @@
   }
 
   ::view-transition-old(root) {
-    animation: aperture-close 0.4s cubic-bezier(0.6, 0, 0.8, 0.2) both;
+    animation: aperture-close 0.5s linear both;
     z-index: 2;
   }
   ::view-transition-new(root) {
-    animation: aperture-open 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) 0.4s both;
+    animation: aperture-open 0.5s linear 0.5s both;
     z-index: 1;
   }
 
-  /* 9-blade aperture shape, vertices on a circle of radius 150vmin (well
-     past any viewport corner) collapsing to/from a single point at center. */
+  /* Real iris blades don't just shrink a fixed shape — as they slide shut
+     each blade also rotates about its pivot, so the opening spirals inward
+     rather than scaling down in place. These steps shrink the 9-point
+     polygon's radius from 150vmin (past any viewport corner) to 0 while
+     rotating it ~40°, so the intermediate frames trace that same twist. */
   @keyframes aperture-close {
-    from {
+    0% {
       clip-path: polygon(
         calc(50% + 0vmin) calc(50% - 150vmin),
         calc(50% + 96.42vmin) calc(50% - 114.91vmin),
@@ -39,7 +42,33 @@
         calc(50% - 96.42vmin) calc(50% - 114.91vmin)
       );
     }
-    to {
+    40% {
+      clip-path: polygon(
+        calc(50% + 22.98vmin) calc(50% - 92.18vmin),
+        calc(50% + 76.86vmin) calc(50% - 55.84vmin),
+        calc(50% + 94.77vmin) calc(50% + 6.63vmin),
+        calc(50% + 68.34vmin) calc(50% + 65.99vmin),
+        calc(50% + 9.93vmin) calc(50% + 94.48vmin),
+        calc(50% - 53.12vmin) calc(50% + 78.76vmin),
+        calc(50% - 91.32vmin) calc(50% + 26.19vmin),
+        calc(50% - 86.79vmin) calc(50% - 38.64vmin),
+        calc(50% - 41.65vmin) calc(50% - 85.39vmin)
+      );
+    }
+    70% {
+      clip-path: polygon(
+        calc(50% + 18.78vmin) calc(50% - 35.32vmin),
+        calc(50% + 37.09vmin) calc(50% - 14.98vmin),
+        calc(50% + 38.04vmin) calc(50% + 12.36vmin),
+        calc(50% + 21.2vmin) calc(50% + 33.92vmin),
+        calc(50% - 5.57vmin) calc(50% + 39.61vmin),
+        calc(50% - 29.73vmin) calc(50% + 26.77vmin),
+        calc(50% - 39.98vmin) calc(50% + 1.4vmin),
+        calc(50% - 31.52vmin) calc(50% - 24.63vmin),
+        calc(50% - 8.32vmin) calc(50% - 39.13vmin)
+      );
+    }
+    100% {
       clip-path: polygon(
         50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
         50% 50%, 50% 50%, 50% 50%, 50% 50%
@@ -47,14 +76,42 @@
     }
   }
 
+  /* Same spiral, unwinding: the new page's blades slide back open along the
+     reverse of that path rather than just growing a static shape. */
   @keyframes aperture-open {
-    from {
+    0% {
       clip-path: polygon(
         50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%,
         50% 50%, 50% 50%, 50% 50%, 50% 50%
       );
     }
-    to {
+    30% {
+      clip-path: polygon(
+        calc(50% + 18.78vmin) calc(50% - 35.32vmin),
+        calc(50% + 37.09vmin) calc(50% - 14.98vmin),
+        calc(50% + 38.04vmin) calc(50% + 12.36vmin),
+        calc(50% + 21.2vmin) calc(50% + 33.92vmin),
+        calc(50% - 5.57vmin) calc(50% + 39.61vmin),
+        calc(50% - 29.73vmin) calc(50% + 26.77vmin),
+        calc(50% - 39.98vmin) calc(50% + 1.4vmin),
+        calc(50% - 31.52vmin) calc(50% - 24.63vmin),
+        calc(50% - 8.32vmin) calc(50% - 39.13vmin)
+      );
+    }
+    60% {
+      clip-path: polygon(
+        calc(50% + 22.98vmin) calc(50% - 92.18vmin),
+        calc(50% + 76.86vmin) calc(50% - 55.84vmin),
+        calc(50% + 94.77vmin) calc(50% + 6.63vmin),
+        calc(50% + 68.34vmin) calc(50% + 65.99vmin),
+        calc(50% + 9.93vmin) calc(50% + 94.48vmin),
+        calc(50% - 53.12vmin) calc(50% + 78.76vmin),
+        calc(50% - 91.32vmin) calc(50% + 26.19vmin),
+        calc(50% - 86.79vmin) calc(50% - 38.64vmin),
+        calc(50% - 41.65vmin) calc(50% - 85.39vmin)
+      );
+    }
+    100% {
       clip-path: polygon(
         calc(50% + 0vmin) calc(50% - 150vmin),
         calc(50% + 96.42vmin) calc(50% - 114.91vmin),
