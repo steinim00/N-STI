@@ -626,7 +626,7 @@
      page loads underneath, then sweeps open to reveal it — see the CSS
      comment above .aperture-overlay for how the blade geometry works. */
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var APERTURE_DURATION = 400;
+    var APERTURE_DURATION = 1000;
 
     var apertureOverlay = document.createElement("div");
     apertureOverlay.className = "aperture-overlay is-open";
@@ -646,7 +646,7 @@
     document.body.appendChild(apertureOverlay);
 
     var apertureBlades = apertureOverlay.querySelectorAll(".blade");
-    var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
+    var ROTATE_TRANSITION = "transform 1s ease-in-out";
 
     // Every page load starts fully closed and opaque, then sweeps the
     // blades open — whether this load followed a navigation we intercepted
@@ -663,7 +663,7 @@
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
         apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
-        apertureOverlay.style.transition = "opacity 0.15s ease-out 0.25s";
+        apertureOverlay.style.transition = "opacity 0.4s ease-out 0.6s";
         apertureOverlay.classList.add("is-open");
         apertureOverlay.classList.remove("is-visible");
       });
