@@ -1,6 +1,12 @@
 (function () {
   "use strict";
 
+  // Block the right-click context menu on images site-wide, as a basic
+  // deterrent against casual "save image as" / copy from photo pages.
+  document.addEventListener("contextmenu", function (e) {
+    if (e.target.closest("img")) e.preventDefault();
+  });
+
   // Slots that are shot: real photographs, shown at their own aspect ratio.
   // Everything else is an honest "not shot yet" placeholder — no AI imagery.
   var SLOTS = [
