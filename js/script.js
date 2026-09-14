@@ -9,16 +9,19 @@
 
   // Slots that are shot: real photographs, shown at their own aspect ratio.
   // Everything else is an honest "not shot yet" placeholder — no AI imagery.
+  // "shape" records each real photo's actual orientation so the homepage
+  // teaser (a fixed landscape slideshow box) can prefer wide shots that
+  // crop gracefully into it, instead of just taking the first N.
   var SLOTS = [
-    { index: 1, real: true, alt: "Kría kafar úr lofti yfir svartri strönd" },
-    { index: 2, real: true, alt: "Íslensk hyrna kind í háu grasi" },
+    { index: 1, real: true, shape: "square", alt: "Kría kafar úr lofti yfir svartri strönd" },
+    { index: 2, real: true, shape: "square", alt: "Íslensk hyrna kind í háu grasi" },
     { index: 3, real: false },
-    { index: 4, real: true, alt: "Tvær kríur á flugi í skýjuðum himni" },
+    { index: 4, real: true, shape: "portrait", alt: "Tvær kríur á flugi í skýjuðum himni" },
     { index: 5, real: false },
-    { index: 6, real: true, alt: "Göngufólk á Sólheimajökli" },
+    { index: 6, real: true, shape: "square", alt: "Göngufólk á Sólheimajökli" },
     { index: 7, real: false },
     { index: 8, real: false },
-    { index: 9, real: true, alt: "Kajakræðarar undir jökulsporði" },
+    { index: 9, real: true, shape: "landscape", alt: "Kajakræðarar undir jökulsporði" },
     { index: 10, real: false }
   ];
 
@@ -28,7 +31,8 @@
     photos.push({
       label: String(slot.index).padStart(2, "0"),
       src: "images/" + slot.index + ".jpg",
-      alt: slot.alt
+      alt: slot.alt,
+      shape: slot.shape
     });
   });
 
@@ -77,8 +81,16 @@
 
     if (previewCount) {
       // Index page teaser: a handful of real photos only, no placeholders.
+      // The slideshow box is a fixed landscape shape, so photos are picked
+      // landscape-first (then square, then portrait last) rather than in
+      // plain slot order — a portrait shot cropped to fill a wide box tends
+      // to lose the most, so it's the last one pulled in if room is short.
+      var SHAPE_RANK = { landscape: 0, square: 1, portrait: 2 };
+      var previewOrder = photos.map(function (_, i) { return i; }).sort(function (a, b) {
+        return SHAPE_RANK[photos[a].shape] - SHAPE_RANK[photos[b].shape];
+      });
       var slides = [];
-      photos.slice(0, previewCount).forEach(function (photo, photoIndex) {
+      previewOrder.slice(0, previewCount).forEach(function (photoIndex) {
         var slide = buildGalleryItem(photoIndex);
         slides.push(slide);
         grid.appendChild(slide);
