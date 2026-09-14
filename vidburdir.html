@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Myndir — NÆSTI</title>
-<meta name="description" content="Myndasafn Næsta — fágaðar svart/hvítar ljósmyndir frá Íslandi.">
+<title>Viðburðir — NÆSTI</title>
+<meta name="description" content="Næsti fangar viðburði í fullum lit eða í hefðbundnu svart/hvítu — hafðu samband til að bóka.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -23,7 +23,7 @@
   </symbol>
 </svg>
 
-<a class="skip-link" href="#gallery">Fara í myndasafn</a>
+<a class="skip-link" href="#events">Fara í efni</a>
 
 <header class="site-header site-header--solid" id="siteHeader">
   <div class="header-inner">
@@ -32,10 +32,10 @@
     </a>
     <div class="nav-cluster">
       <nav class="site-nav" id="siteNav">
-        <a href="myndir.html" aria-current="page">Myndir</a>
+        <a href="myndir.html">Myndir</a>
         <a href="bokin.html">Bókin</a>
         <a href="um-naesta.html">Um Næsta</a>
-        <a href="vidburdir.html">Viðburðir</a>
+        <a href="vidburdir.html" aria-current="page">Viðburðir</a>
         <a href="index.html#sizes">Stærðir</a>
         <a href="hafa-samband.html">Hafa samband</a>
       </nav>
@@ -53,11 +53,38 @@
 <main>
 
   <section class="page-header">
-    <h1 class="section-title myndir-title">Myndasafn</h1>
+    <p class="section-eyebrow">Þjónusta</p>
+    <h1 class="section-title">Viðburðir</h1>
   </section>
 
-  <section class="gallery" id="gallery">
-    <div class="gallery-grid" id="galleryGrid"></div>
+  <section class="events" id="events">
+    <p class="events-intro">Næsti fangar brúðkaup, afmæli, fyrirtækjasamkomur og aðrar stundir sem eiga skilið að vera
+      varðveittar — annaðhvort í fullum lit eða í okkar hefðbundna svart/hvíta stíl, eftir því hvað hentar
+      viðburðinum þínum best.</p>
+
+    <div class="events-grid">
+      <div class="event-card is-color">
+        <p class="event-card-type">Brúðkaup</p>
+        <p class="event-card-style">Í lit</p>
+      </div>
+      <div class="event-card">
+        <p class="event-card-type">Afmæli</p>
+        <p class="event-card-style">Svart &amp; hvítt</p>
+      </div>
+      <div class="event-card">
+        <p class="event-card-type">Fyrirtækjaviðburðir</p>
+        <p class="event-card-style">Svart &amp; hvítt</p>
+      </div>
+      <div class="event-card is-color">
+        <p class="event-card-type">Einkasamkvæmi</p>
+        <p class="event-card-style">Í lit</p>
+      </div>
+    </div>
+
+    <div class="events-cta">
+      <p>Langar þig að bóka Næsta á viðburð? Hafðu samband og við tökum samtalið þaðan.</p>
+      <a href="hafa-samband.html" class="gallery-more-link">Hafa samband</a>
+    </div>
   </section>
 
 </main>
@@ -71,16 +98,6 @@
     <p class="footer-copy">&copy; <span id="year"></span> Næsti. Öll réttindi áskilin.</p>
   </div>
 </footer>
-
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Myndaskoðari" hidden>
-  <button class="lightbox-close" id="lightboxClose" aria-label="Loka">&times;</button>
-  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Fyrri mynd">&#8249;</button>
-  <figure class="lightbox-figure">
-    <img src="" alt="" id="lightboxImage">
-    <figcaption id="lightboxCaption"></figcaption>
-  </figure>
-  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Næsta mynd">&#8250;</button>
-</div>
 
 <script src="js/script.js"></script>
 </body>
