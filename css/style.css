@@ -707,9 +707,9 @@ h1, h2, h3, h4, h5, h6 {
 /* ---------------- Events ---------------- */
 /* The print/art side of Næsti is deliberately black/white only (see the
    "Tímaleysi" value above) — but event bookings are a separate service,
-   shot in full colour or in the studio's signature black/white depending
-   on what the occasion calls for, hence the mixed treatment across this
-   grid rather than the gallery's blanket grayscale filter. */
+   and these are real delivered event photos, shown in the color they
+   were actually shot in rather than run through the gallery's blanket
+   grayscale filter. */
 .events-intro {
   max-width: 720px;
   margin: 0 auto clamp(2rem, 5vw, 3rem);
@@ -733,9 +733,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: auto;
   display: block;
-  filter: grayscale(1) contrast(1.05);
 }
-.event-photo.is-color img { filter: none; }
 .events-cta {
   max-width: 620px;
   margin: clamp(3rem, 6vw, 4rem) auto 0;
