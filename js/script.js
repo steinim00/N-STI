@@ -648,6 +648,13 @@
     var apertureBlades = apertureOverlay.querySelectorAll(".blade");
     var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
 
+    // Bumped by every interaction that takes over the (shared) overlay, so
+    // a delayed cleanup callback from an older interaction — e.g. the
+    // page-load open sequence's own timer, if a nav link or "Stærðir" is
+    // clicked while it's still pending — can tell it's been superseded and
+    // skip touching classes a newer interaction now owns.
+    var apertureGen = 0;
+
     // The very first time a visitor's browser loads the homepage, the
     // opening sweep runs slower (1s) so it reads as a proper entrance
     // rather than a quick flourish. Every other load — including later
@@ -670,6 +677,7 @@
     // so at full open they've genuinely vanished rather than leaving visible
     // tips in frame — no fade needed to paper over the difference. Once the
     // rotation finishes, the overlay drops back to its hidden resting state.
+    var loadGen = ++apertureGen;
     apertureOverlay.style.transition = "none";
     apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
     apertureOverlay.classList.remove("is-open");
@@ -677,11 +685,13 @@
     void apertureOverlay.offsetHeight;
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
+        if (apertureGen !== loadGen) return;
         apertureBlades.forEach(function (blade) { blade.style.transition = openTransition; });
         apertureOverlay.classList.add("is-open");
       });
     });
     window.setTimeout(function () {
+      if (apertureGen !== loadGen) return;
       apertureOverlay.style.transition = "none";
       apertureOverlay.classList.remove("is-visible");
     }, openDuration + 60);
@@ -700,6 +710,7 @@
       if (url.pathname === window.location.pathname && url.hash) return;
 
       e.preventDefault();
+      apertureGen++;
       // Closing: snap the overlay opaque instantly (its own content is just
       // the blade shapes, so there's nothing to fade in) and let the blade
       // rotation itself — visible from frame one — be the entire motion.
@@ -715,9 +726,13 @@
     });
 
     // "Stærðir" jumps to a same-page section — no navigation, just a scroll —
-    // so it was excluded from the click handler above entirely. It gets the
-    // exact same black aperture close/open, at the exact same speed, just
-    // with a scroll in between instead of a real navigation.
+    // so it was excluded from the click handler above entirely. It closes
+    // the same black aperture at the same speed, jumps the scroll position
+    // underneath while hidden, but then — instead of auto-opening on a
+    // timer — stays closed until the visitor scrolls: their own scroll
+    // input (wheel, touch, or keyboard) drives the blades open directly,
+    // like turning a focus ring, rather than playing a canned animation.
+    var SCROLL_TO_OPEN = 400; // px of accumulated downward scroll input to fully open
     document.querySelectorAll('a[href$="#sizes"]').forEach(function (link) {
       link.addEventListener("click", function (e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -732,6 +747,7 @@
         if (!target) return;
 
         e.preventDefault();
+        apertureGen++;
         var html = document.documentElement;
         var prevScrollBehavior = html.style.scrollBehavior;
 
@@ -747,18 +763,68 @@
           target.scrollIntoView({ block: "start" });
           html.style.scrollBehavior = prevScrollBehavior;
 
+          // Closed and jumped — now wait for the visitor's own scroll to
+          // drive it open. No CSS transition here: each tick sets the
+          // blade transform directly from the accumulated progress.
           apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
-          void apertureOverlay.offsetHeight;
-          window.requestAnimationFrame(function () {
-            window.requestAnimationFrame(function () {
-              apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
-              apertureOverlay.classList.add("is-open");
-            });
-          });
-          window.setTimeout(function () {
+
+          var progress = 0; // 0 = closed, 1 = fully open
+          var rafPending = false;
+          var applyProgress = function () {
+            rafPending = false;
+            var angle = 50 * progress;
+            var scale = 1 - progress;
+            var t = "rotate(" + angle + "deg) scale(" + scale + ")";
+            apertureBlades.forEach(function (blade) { blade.style.transform = t; });
+            if (progress >= 1) finish();
+          };
+          var addProgress = function (delta) {
+            if (delta <= 0) return;
+            progress = Math.min(1, progress + delta / SCROLL_TO_OPEN);
+            if (!rafPending) {
+              rafPending = true;
+              window.requestAnimationFrame(applyProgress);
+            }
+          };
+
+          var onWheel = function (e) {
+            e.preventDefault();
+            addProgress(e.deltaY);
+          };
+          var touchY = null;
+          var onTouchStart = function (e) { touchY = e.touches[0].clientY; };
+          var onTouchMove = function (e) {
+            e.preventDefault();
+            if (touchY === null) return;
+            var y = e.touches[0].clientY;
+            addProgress(touchY - y);
+            touchY = y;
+          };
+          var onKeydown = function (e) {
+            if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+              e.preventDefault();
+              addProgress(SCROLL_TO_OPEN / 3);
+            } else if (e.key === "End") {
+              e.preventDefault();
+              addProgress(SCROLL_TO_OPEN);
+            }
+          };
+
+          var finish = function () {
+            window.removeEventListener("wheel", onWheel);
+            window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("keydown", onKeydown);
+            apertureBlades.forEach(function (blade) { blade.style.transform = ""; blade.style.transition = ""; });
             apertureOverlay.style.transition = "none";
+            apertureOverlay.classList.add("is-open");
             apertureOverlay.classList.remove("is-visible");
-          }, APERTURE_DURATION + 60);
+          };
+
+          window.addEventListener("wheel", onWheel, { passive: false });
+          window.addEventListener("touchstart", onTouchStart, { passive: true });
+          window.addEventListener("touchmove", onTouchMove, { passive: false });
+          window.addEventListener("keydown", onKeydown);
         }, APERTURE_DURATION);
       });
     });
