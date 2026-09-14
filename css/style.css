@@ -426,6 +426,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   margin: 0;
 }
+.myndir-title { color: #7a7a7a; }
 
 /* ---------------- Gallery ---------------- */
 .gallery {
