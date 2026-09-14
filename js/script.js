@@ -646,6 +646,7 @@
     document.body.appendChild(apertureOverlay);
 
     var apertureBlades = apertureOverlay.querySelectorAll(".blade");
+    var apertureSvg = apertureOverlay.querySelector("svg");
     var ROTATE_TRANSITION = "transform 0.4s ease-in-out";
 
     // Bumped by every interaction that takes over the (shared) overlay, so
@@ -679,6 +680,7 @@
     var loadGen = ++apertureGen;
     apertureOverlay.style.transition = "none";
     apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+    apertureSvg.style.transition = "none";
     apertureOverlay.classList.remove("is-open");
     apertureOverlay.classList.add("is-visible");
     void apertureOverlay.offsetHeight;
@@ -686,6 +688,7 @@
       window.requestAnimationFrame(function () {
         if (apertureGen !== loadGen) return;
         apertureBlades.forEach(function (blade) { blade.style.transition = openTransition; });
+        apertureSvg.style.transition = openTransition;
         apertureOverlay.classList.add("is-open");
       });
     });
@@ -715,9 +718,11 @@
       // rotation itself — visible from frame one — be the entire motion.
       apertureOverlay.style.transition = "none";
       apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+      apertureSvg.style.transition = "none";
       apertureOverlay.classList.add("is-visible");
       void apertureOverlay.offsetHeight;
       apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+      apertureSvg.style.transition = ROTATE_TRANSITION;
       apertureOverlay.classList.remove("is-open");
       window.setTimeout(function () {
         window.location.href = link.href;
@@ -752,9 +757,11 @@
 
         apertureOverlay.style.transition = "none";
         apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+        apertureSvg.style.transition = "none";
         apertureOverlay.classList.add("is-visible");
         void apertureOverlay.offsetHeight;
         apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
+        apertureSvg.style.transition = ROTATE_TRANSITION;
         apertureOverlay.classList.remove("is-open");
 
         window.setTimeout(function () {
@@ -770,6 +777,7 @@
           // come out as one smooth, slightly trailing motion — and it keeps
           // gliding for a few frames after the input stops, like momentum.
           apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+          apertureSvg.style.transition = "none";
 
           var targetProgress = 0; // 0 = closed, 1 = fully open
           var shownProgress = 0;
@@ -777,9 +785,9 @@
           var tick = function () {
             shownProgress += (targetProgress - shownProgress) * 0.16;
             if (targetProgress >= 1 && 1 - shownProgress < 0.003) shownProgress = 1;
-            var angle = 110 * shownProgress;
-            var t = "rotate(" + angle + "deg)";
-            apertureBlades.forEach(function (blade) { blade.style.transform = t; });
+            var angle = 50 * shownProgress;
+            apertureBlades.forEach(function (blade) { blade.style.transform = "rotate(" + angle + "deg)"; });
+            apertureSvg.style.transform = "scale(" + (1 + 0.7 * shownProgress) + ")";
             if (shownProgress >= 1) {
               ticking = false;
               finish();
@@ -825,6 +833,8 @@
             window.removeEventListener("touchmove", onTouchMove);
             window.removeEventListener("keydown", onKeydown);
             apertureBlades.forEach(function (blade) { blade.style.transform = ""; blade.style.transition = ""; });
+            apertureSvg.style.transform = "";
+            apertureSvg.style.transition = "";
             apertureOverlay.style.transition = "none";
             apertureOverlay.classList.add("is-open");
             apertureOverlay.classList.remove("is-visible");

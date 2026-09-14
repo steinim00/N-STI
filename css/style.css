@@ -24,6 +24,18 @@
   height: 200vmax;
   display: block;
   overflow: visible;
+  transform: scale(1);
+}
+/* Rotating the blades past ~50-55° stops looking like an aperture at all —
+   the pinwheel silhouette itself starts distorting into a different, spikier
+   shape as blade edges cross further, before the last bits finally clear
+   the frame. A real iris never does that: the opening stays the same clean
+   N-gon, it just grows. So rotation is capped at a "clean" 50° — the same
+   pinwheel shape at every viewport size — and the whole assembly (this svg,
+   uniformly, not the individual blades) scales up 1.7x to physically grow
+   that same shape large enough to push it past any viewport's edges. */
+.aperture-overlay.is-open svg {
+  transform: scale(1.7);
 }
 /* Each blade is a pie-slice from its own pivot (fixed on the rim) through
    the center to the next blade's pivot. At rotate(0) all 9 tile the disc
@@ -49,7 +61,7 @@
   transform: rotate(0deg);
 }
 .aperture-overlay.is-open .blade {
-  transform: rotate(110deg);
+  transform: rotate(50deg);
 }
 
 /* ============================================================
