@@ -777,7 +777,7 @@
           var tick = function () {
             shownProgress += (targetProgress - shownProgress) * 0.16;
             if (targetProgress >= 1 && 1 - shownProgress < 0.003) shownProgress = 1;
-            var angle = 50 * shownProgress;
+            var angle = 110 * shownProgress;
             var t = "rotate(" + angle + "deg)";
             apertureBlades.forEach(function (blade) { blade.style.transform = t; });
             if (shownProgress >= 1) {
