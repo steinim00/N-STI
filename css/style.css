@@ -1061,11 +1061,18 @@ h1, h2, h3, h4, h5, h6 {
 .cart-empty a { color: var(--naestablue); }
 .cart-item {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 72px 1fr auto auto auto;
   align-items: center;
   gap: 1.2rem;
   padding: 1.4rem 0;
   border-bottom: 1px solid #e4e4e2;
+}
+.cart-item-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  background: var(--naestagray);
+  filter: grayscale(1) contrast(1.05);
 }
 .cart-item-title {
   font-family: var(--font-display);
@@ -1188,10 +1195,11 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 640px) {
   .cart-item {
-    grid-template-columns: 1fr auto;
-    grid-template-areas: "info remove" "stepper total";
+    grid-template-columns: 56px 1fr auto;
+    grid-template-areas: "thumb info remove" "thumb stepper total";
     row-gap: 0.8rem;
   }
+  .cart-item-thumb { grid-area: thumb; width: 56px; height: 56px; }
   .cart-item-info { grid-area: info; }
   .cart-item-remove { grid-area: remove; justify-self: end; }
   .cart-item-stepper { grid-area: stepper; }
