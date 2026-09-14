@@ -34,14 +34,16 @@
    independently (an earlier version) broke that shared-edge tiling at any
    angle other than fully closed, so adjacent blades visibly pulled apart
    into separate floating shapes instead of staying one connected iris.
-   Fill and stroke are the same gray, not a contrasting outline, so the
-   assembly reads as one mechanism rather than a set of distinct pieces.
-   The transition itself is driven from JS (script.js), which needs
-   different timing for closing vs. opening, so no transition is baked in
-   here beyond the resting transform. */
+   Fill is a flat gray with a slightly darker outline of the same hue (not
+   a stark contrasting color) — enough to read the individual blade edges
+   as a mechanism, without the harsh black/white seam lines that used to
+   make the blades look like separate, disconnected pieces. The transition
+   itself is driven from JS (script.js), which needs different timing for
+   closing vs. opening, so no transition is baked in here beyond the
+   resting transform. */
 .aperture-overlay .blade {
   fill: #6e6e6e;
-  stroke: #6e6e6e;
+  stroke: #4d4d4d;
   stroke-width: 0.8;
   transform-box: view-box;
   transform: rotate(0deg);
