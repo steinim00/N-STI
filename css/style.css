@@ -46,13 +46,6 @@
 .aperture-overlay.is-open .blade {
   transform: rotate(50deg) scale(0);
 }
-/* Used for the in-page "Stærðir" scroll: the section it jumps to sits on a
-   white background, so a black curtain would flash oddly against it —
-   swap the blades to white-on-dark-seam instead while that scroll happens. */
-.aperture-overlay.is-light-theme .blade {
-  fill: var(--white);
-  stroke: rgba(0, 0, 0, 0.35);
-}
 
 /* ============================================================
    NÆSTI — brand tokens
