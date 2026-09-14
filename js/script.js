@@ -663,20 +663,18 @@
     // skip touching classes a newer interaction now owns.
     var apertureGen = 0;
 
-    // The very first time a visitor's browser loads the homepage, the
-    // opening sweep runs slower (1.5s) so it reads as a proper entrance
-    // rather than a quick flourish. Every other load — including later
-    // visits to index.html itself — uses the normal, snappier duration.
-    var FIRST_INDEX_FLAG = "naestiIndexVisited";
-    var pathname = window.location.pathname;
-    var isIndexPage = pathname === "/" || pathname === "" || /\/index\.html$/.test(pathname);
+    // The very first time a visitor's browser loads any page on the site,
+    // the opening sweep runs slower (1.5s) so it reads as a proper entrance
+    // rather than a quick flourish. Every other load — whichever page it
+    // lands on — uses the normal, snappier duration.
+    var FIRST_VISIT_FLAG = "naestiVisited";
     var openTransition = ROTATE_TRANSITION;
     var openDuration = APERTURE_DURATION;
-    if (isIndexPage && !localStorage.getItem(FIRST_INDEX_FLAG)) {
+    if (!localStorage.getItem(FIRST_VISIT_FLAG)) {
       openTransition = "transform 1.5s ease-in-out";
       openDuration = 1500;
     }
-    if (isIndexPage) localStorage.setItem(FIRST_INDEX_FLAG, "1");
+    localStorage.setItem(FIRST_VISIT_FLAG, "1");
 
     // Every page load starts fully closed and opaque, then sweeps the
     // blades open — whether this load followed a navigation we intercepted
