@@ -15,7 +15,7 @@
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  background: var(--naestagray);
+  background: var(--white);
 }
 .aperture-overlay.is-visible {
   opacity: 1;
@@ -703,6 +703,68 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   font-size: 0.92rem;
   color: #444;
+}
+
+/* ---------------- Events ---------------- */
+/* The print/art side of Næsti is deliberately black/white only (see the
+   "Tímaleysi" value above) — but event bookings are a separate service,
+   shot in full colour or in the studio's signature black/white depending
+   on what the occasion calls for. No shoots delivered yet, so this shows
+   honest placeholder cards (per the same no-fake-imagery rule as the
+   gallery) rather than pretending finished work exists. */
+.events-intro {
+  max-width: 720px;
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+  padding: 0 var(--gutter);
+  color: #2a2a2a;
+}
+.events-grid {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.7rem, 2vw, 1.2rem);
+}
+.event-card {
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--naestagray-deep);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1.2rem;
+}
+.event-card.is-color {
+  background: var(--naestablue);
+  border-color: var(--naestablue-deep);
+  color: var(--white);
+}
+.event-card-type {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+}
+.event-card-style {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--naestablue);
+  opacity: 0.75;
+}
+.event-card.is-color .event-card-style { color: var(--white); opacity: 0.85; }
+.events-cta {
+  max-width: 620px;
+  margin: clamp(3rem, 6vw, 4rem) auto 0;
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+.events-cta p { color: #2a2a2a; margin-bottom: 1.4rem; }
+@media (max-width: 720px) {
+  .events-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ---------------- Sizes ---------------- */
