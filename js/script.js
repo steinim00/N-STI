@@ -673,10 +673,9 @@
     // Every page load starts fully closed and opaque, then sweeps the
     // blades open — whether this load followed a navigation we intercepted
     // or the visitor arrived directly (typed URL, refresh, first visit).
-    // Each blade both rotates AND shrinks toward its own (off-screen) pivot,
-    // so at full open they've genuinely vanished rather than leaving visible
-    // tips in frame — no fade needed to paper over the difference. Once the
-    // rotation finishes, the overlay drops back to its hidden resting state.
+    // Rotation alone doesn't retract the blades fully out of frame, so once
+    // the rotation timer completes the overlay is hidden with a hard,
+    // untransitioned cut rather than a fade — a snap, not a dissolve.
     var loadGen = ++apertureGen;
     apertureOverlay.style.transition = "none";
     apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
@@ -779,8 +778,7 @@
             shownProgress += (targetProgress - shownProgress) * 0.16;
             if (targetProgress >= 1 && 1 - shownProgress < 0.003) shownProgress = 1;
             var angle = 50 * shownProgress;
-            var scale = 1 - shownProgress;
-            var t = "rotate(" + angle + "deg) scale(" + scale + ")";
+            var t = "rotate(" + angle + "deg)";
             apertureBlades.forEach(function (blade) { blade.style.transform = t; });
             if (shownProgress >= 1) {
               ticking = false;
