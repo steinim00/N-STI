@@ -732,7 +732,7 @@
     // timer — stays closed until the visitor scrolls: their own scroll
     // input (wheel, touch, or keyboard) drives the blades open directly,
     // like turning a focus ring, rather than playing a canned animation.
-    var SCROLL_TO_OPEN = 400; // px of accumulated downward scroll input to fully open
+    var SCROLL_TO_OPEN = 1100; // px of accumulated downward scroll input to fully open
     document.querySelectorAll('a[href$="#sizes"]').forEach(function (link) {
       link.addEventListener("click", function (e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -764,26 +764,37 @@
           html.style.scrollBehavior = prevScrollBehavior;
 
           // Closed and jumped — now wait for the visitor's own scroll to
-          // drive it open. No CSS transition here: each tick sets the
-          // blade transform directly from the accumulated progress.
+          // drive it open. No CSS transition here: the target progress
+          // jumps straight to wherever the input says, but the displayed
+          // progress eases toward it a little every frame (instead of
+          // snapping straight there), so quick or jerky wheel/touch ticks
+          // come out as one smooth, slightly trailing motion — and it keeps
+          // gliding for a few frames after the input stops, like momentum.
           apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
 
-          var progress = 0; // 0 = closed, 1 = fully open
-          var rafPending = false;
-          var applyProgress = function () {
-            rafPending = false;
-            var angle = 50 * progress;
-            var scale = 1 - progress;
+          var targetProgress = 0; // 0 = closed, 1 = fully open
+          var shownProgress = 0;
+          var ticking = false;
+          var tick = function () {
+            shownProgress += (targetProgress - shownProgress) * 0.16;
+            if (targetProgress >= 1 && 1 - shownProgress < 0.003) shownProgress = 1;
+            var angle = 50 * shownProgress;
+            var scale = 1 - shownProgress;
             var t = "rotate(" + angle + "deg) scale(" + scale + ")";
             apertureBlades.forEach(function (blade) { blade.style.transform = t; });
-            if (progress >= 1) finish();
+            if (shownProgress >= 1) {
+              ticking = false;
+              finish();
+              return;
+            }
+            window.requestAnimationFrame(tick);
           };
           var addProgress = function (delta) {
             if (delta <= 0) return;
-            progress = Math.min(1, progress + delta / SCROLL_TO_OPEN);
-            if (!rafPending) {
-              rafPending = true;
-              window.requestAnimationFrame(applyProgress);
+            targetProgress = Math.min(1, targetProgress + delta / SCROLL_TO_OPEN);
+            if (!ticking) {
+              ticking = true;
+              window.requestAnimationFrame(tick);
             }
           };
 
