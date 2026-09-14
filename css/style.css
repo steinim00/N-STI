@@ -49,7 +49,7 @@
   transform: rotate(0deg);
 }
 .aperture-overlay.is-open .blade {
-  transform: rotate(50deg);
+  transform: rotate(110deg);
 }
 
 /* ============================================================
