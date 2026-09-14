@@ -714,13 +714,10 @@
       }, APERTURE_DURATION);
     });
 
-    // "Stærðir" jumps to a same-page section — no navigation, just a scroll.
-    // That section sits on a white background, so play the same aperture
-    // close/open in white instead of black, and slower/calmer than the
-    // snappy page-to-page transition, since it's just repositioning the
-    // scroll rather than swapping out the whole page.
-    var SIZES_TRANSITION = "transform 0.8s ease-in-out";
-    var SIZES_DURATION = 800;
+    // "Stærðir" jumps to a same-page section — no navigation, just a scroll —
+    // so it was excluded from the click handler above entirely. It gets the
+    // exact same black aperture close/open, at the exact same speed, just
+    // with a scroll in between instead of a real navigation.
     document.querySelectorAll('a[href$="#sizes"]').forEach(function (link) {
       link.addEventListener("click", function (e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -738,12 +735,11 @@
         var html = document.documentElement;
         var prevScrollBehavior = html.style.scrollBehavior;
 
-        apertureOverlay.classList.add("is-light-theme");
         apertureOverlay.style.transition = "none";
         apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
         apertureOverlay.classList.add("is-visible");
         void apertureOverlay.offsetHeight;
-        apertureBlades.forEach(function (blade) { blade.style.transition = SIZES_TRANSITION; });
+        apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
         apertureOverlay.classList.remove("is-open");
 
         window.setTimeout(function () {
@@ -755,16 +751,15 @@
           void apertureOverlay.offsetHeight;
           window.requestAnimationFrame(function () {
             window.requestAnimationFrame(function () {
-              apertureBlades.forEach(function (blade) { blade.style.transition = SIZES_TRANSITION; });
+              apertureBlades.forEach(function (blade) { blade.style.transition = ROTATE_TRANSITION; });
               apertureOverlay.classList.add("is-open");
             });
           });
           window.setTimeout(function () {
             apertureOverlay.style.transition = "none";
             apertureOverlay.classList.remove("is-visible");
-            apertureOverlay.classList.remove("is-light-theme");
-          }, SIZES_DURATION + 60);
-        }, SIZES_DURATION);
+          }, APERTURE_DURATION + 60);
+        }, APERTURE_DURATION);
       });
     });
   }
