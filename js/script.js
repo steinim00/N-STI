@@ -498,6 +498,12 @@
       var row = document.createElement("div");
       row.className = "cart-item";
 
+      var thumb = document.createElement("img");
+      thumb.className = "cart-item-thumb";
+      thumb.src = "images/1.jpg";
+      thumb.alt = "";
+      thumb.loading = "lazy";
+
       var info = document.createElement("div");
       info.className = "cart-item-info";
       var title = document.createElement("p");
@@ -547,6 +553,7 @@
         updateCartItemQty(item.id, 0);
       });
 
+      row.appendChild(thumb);
       row.appendChild(info);
       row.appendChild(stepper);
       row.appendChild(lineTotalEl);
