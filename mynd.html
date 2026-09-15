@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ljósmyndaprentun — NÆSTI</title>
+<meta name="description" content="Veldu stærð og fjölda af ljósmynd frá Næsta — frá borðstandi upp í heila veggmynd.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cart-trolley-icon" viewBox="0 0 24 24">
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="9" cy="21" r="1.4" fill="currentColor"/>
+    <circle cx="19" cy="21" r="1.4" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<a class="skip-link" href="#photoProduct">Fara í efni</a>
+
+<header class="site-header site-header--solid" id="siteHeader">
+  <div class="header-inner">
+    <a href="index.html" class="brand-mark" aria-label="Næsti - forsíða">
+      <span class="brand-word">Næsti</span>
+    </a>
+    <div class="nav-cluster">
+      <nav class="site-nav" id="siteNav">
+        <a href="myndir.html">Myndir</a>
+        <a href="bokin.html">Bókin</a>
+        <a href="um-naesta.html">Um Næsta</a>
+        <a href="vidburdir.html">Viðburðir</a>
+        <a href="index.html#sizes">Stærðir</a>
+        <a href="hafa-samband.html">Hafa samband</a>
+      </nav>
+      <a href="karfa.html" class="cart-link" id="cartLink" aria-label="Karfa">
+        <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </a>
+      <button class="nav-toggle is-dark" id="navToggle" aria-label="Opna valmynd" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-header">
+    <p class="section-eyebrow">Prentun</p>
+    <h1 class="section-title" id="photoProductHeading">Ljósmyndaprentun</h1>
+  </section>
+
+  <section class="photo-product" id="photoProduct">
+    <div class="photo-product-media" id="photoProductMedia">
+      <img id="photoProductImage" src="" alt="" loading="lazy">
+    </div>
+    <div class="photo-product-details">
+      <p>Veldu stærð og fjölda — hver prentun er handvalin og fáguð, prentuð á vandaðan safnpappír.</p>
+
+      <div class="size-options" id="sizeOptions">
+        <button type="button" class="size-option" data-size="bordstandur" data-price="4990">
+          <span class="size-option-info">
+            <span class="size-option-name">Borðstandur</span>
+            <span class="size-option-dim">20–30 cm</span>
+          </span>
+          <span class="size-option-price">4.990 kr</span>
+        </button>
+        <button type="button" class="size-option" data-size="midlungsstaerd" data-price="12990">
+          <span class="size-option-info">
+            <span class="size-option-name">Miðlungsstærð</span>
+            <span class="size-option-dim">50–70 cm</span>
+          </span>
+          <span class="size-option-price">12.990 kr</span>
+        </button>
+        <button type="button" class="size-option" data-size="veggmynd" data-price="24990">
+          <span class="size-option-info">
+            <span class="size-option-name">Veggmynd</span>
+            <span class="size-option-dim">100 cm+</span>
+          </span>
+          <span class="size-option-price">24.990 kr</span>
+        </button>
+      </div>
+
+      <div class="book-purchase-row">
+        <div class="quantity-box">
+          <span class="quantity-label">Magn</span>
+          <div class="quantity-stepper">
+            <button type="button" class="qty-btn" id="photoQtyMinus" aria-label="Fækka">&minus;</button>
+            <input type="number" id="photoQty" class="qty-input" value="1" min="1" max="20" inputmode="numeric" aria-label="Fjöldi eintaka">
+            <button type="button" class="qty-btn" id="photoQtyPlus" aria-label="Fjölga">+</button>
+          </div>
+        </div>
+        <button type="button" class="add-to-cart-btn" id="addPhotoToCartBtn">
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#cart-trolley-icon"/></svg>
+          <span class="btn-label" id="addPhotoToCartLabel">Bæta í körfu</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a href="index.html" class="brand-mark brand-mark--footer" aria-label="Næsti - forsíða">
+      <span class="brand-word">Næsti</span>
+    </a>
+    <p class="footer-tagline">Unaður fyrir augun</p>
+    <p class="footer-copy">&copy; <span id="year"></span> Næsti. Öll réttindi áskilin.</p>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
