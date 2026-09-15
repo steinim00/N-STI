@@ -784,6 +784,21 @@
       apertureOverlay.classList.remove("is-visible");
     }, openDuration + 60);
 
+    // Bfcache restore (e.g. the browser back gesture) resurrects this page's
+    // exact prior DOM instead of re-running the load sequence above — and
+    // that DOM was last left mid-close (opaque, blades shut) the instant
+    // before it navigated away. Without this, going back shows that frozen
+    // closed frame forever, since nothing else would ever open it back up.
+    window.addEventListener("pageshow", function (e) {
+      if (!e.persisted) return;
+      apertureGen++;
+      apertureOverlay.style.transition = "none";
+      apertureBlades.forEach(function (blade) { blade.style.transition = "none"; });
+      apertureSvg.style.transition = "none";
+      apertureOverlay.classList.add("is-open");
+      apertureOverlay.classList.remove("is-visible");
+    });
+
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var link = e.target.closest("a[href]");
