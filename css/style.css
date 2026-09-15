@@ -466,6 +466,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   display: block;
   width: 100%;
+  text-decoration: none;
   break-inside: avoid;
   margin: 0 0 clamp(0.6rem, 1.6vw, 1.4rem);
 }
@@ -1092,6 +1093,70 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 780px) {
   .book { grid-template-columns: 1fr; }
+}
+
+/* ---------------- Photo product page (mynd.html) ---------------- */
+.photo-product {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: start;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(3rem, 7vw, 5rem) var(--gutter) clamp(5rem, 10vw, 8rem);
+  gap: clamp(2rem, 6vw, 4.5rem);
+}
+.photo-product-media {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--naestagray) 25%, var(--naestagray-deep) 50%, var(--naestagray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+.photo-product-media.is-loaded { animation: none; background: none; }
+.photo-product-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.photo-product-media.is-loaded img { opacity: 1; }
+.photo-product-details p { color: #2a2a2a; }
+.size-options {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.6rem 0;
+}
+.size-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  background: var(--white);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.size-option:hover { border-color: var(--naestablue); }
+.size-option.is-selected { border-color: var(--naestablue); background: rgba(14,71,120,0.06); }
+.size-option-info { display: flex; flex-direction: column; gap: 0.2rem; }
+.size-option-name { font-family: var(--font-display); font-weight: 600; }
+.size-option-dim { color: #666; font-size: 0.85rem; }
+.size-option-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--naestablue);
+  white-space: nowrap;
+}
+
+@media (max-width: 780px) {
+  .photo-product { grid-template-columns: 1fr; }
 }
 
 /* ---------------- Cart page ---------------- */

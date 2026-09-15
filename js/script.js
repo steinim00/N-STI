@@ -29,6 +29,7 @@
   SLOTS.forEach(function (slot) {
     if (!slot.real) return;
     photos.push({
+      id: slot.index,
       label: String(slot.index).padStart(2, "0"),
       src: "images/" + slot.index + ".jpg",
       alt: slot.alt,
@@ -48,13 +49,20 @@
     }
   };
 
-  var buildGalleryItem = function (photoIndex) {
+  var buildGalleryItem = function (photoIndex, opts) {
+    opts = opts || {};
     var photo = photos[photoIndex];
-    var fig = document.createElement("button");
-    fig.type = "button";
+    var fig = document.createElement(opts.asLink ? "a" : "button");
+    if (opts.asLink) {
+      fig.href = "mynd.html?id=" + photo.id;
+    } else {
+      fig.type = "button";
+    }
     fig.className = "gallery-item";
     fig.setAttribute("data-photo-index", photoIndex);
-    fig.setAttribute("aria-label", "Skoða mynd " + photo.label);
+    fig.setAttribute("aria-label", opts.asLink
+      ? "Skoða og kaupa mynd " + photo.label
+      : "Skoða mynd " + photo.label);
 
     var img = document.createElement("img");
     img.src = photo.src;
@@ -171,7 +179,7 @@
           grid.appendChild(placeholder);
           return;
         }
-        grid.appendChild(buildGalleryItem(photoCursor++));
+        grid.appendChild(buildGalleryItem(photoCursor++, { asLink: true }));
       });
     }
   }
@@ -410,33 +418,34 @@
     if (existing) {
       existing.qty += qty;
     } else {
-      items.push({ id: product.id, title: product.title, price: product.price, qty: qty });
+      items.push({ id: product.id, title: product.title, price: product.price, qty: qty, img: product.img });
     }
     writeCart(items);
     renderCartBadge();
   };
   renderCartBadge();
 
+  /* Quantity stepper — shared by Bókin and the photo product page */
+  var wireQuantityStepper = function (input, minusBtn, plusBtn) {
+    if (!input || !minusBtn || !plusBtn) return;
+    var min = parseInt(input.min, 10) || 1;
+    var max = parseInt(input.max, 10) || 20;
+    minusBtn.addEventListener("click", function () {
+      input.value = Math.max(min, (parseInt(input.value, 10) || min) - 1);
+    });
+    plusBtn.addEventListener("click", function () {
+      input.value = Math.min(max, (parseInt(input.value, 10) || min) + 1);
+    });
+    input.addEventListener("change", function () {
+      var value = parseInt(input.value, 10);
+      if (isNaN(value)) value = min;
+      input.value = Math.min(max, Math.max(min, value));
+    });
+  };
+
   /* Quantity stepper (Bókin) */
   var qtyInput = document.getElementById("bookQty");
-  var qtyMinus = document.getElementById("qtyMinus");
-  var qtyPlus = document.getElementById("qtyPlus");
-  if (qtyInput && qtyMinus && qtyPlus) {
-    var qtyMin = parseInt(qtyInput.min, 10) || 1;
-    var qtyMax = parseInt(qtyInput.max, 10) || 20;
-    var clampQty = function () {
-      var value = parseInt(qtyInput.value, 10);
-      if (isNaN(value)) value = qtyMin;
-      qtyInput.value = Math.min(qtyMax, Math.max(qtyMin, value));
-    };
-    qtyMinus.addEventListener("click", function () {
-      qtyInput.value = Math.max(qtyMin, (parseInt(qtyInput.value, 10) || qtyMin) - 1);
-    });
-    qtyPlus.addEventListener("click", function () {
-      qtyInput.value = Math.min(qtyMax, (parseInt(qtyInput.value, 10) || qtyMin) + 1);
-    });
-    qtyInput.addEventListener("change", clampQty);
-  }
+  wireQuantityStepper(qtyInput, document.getElementById("qtyMinus"), document.getElementById("qtyPlus"));
 
   /* Add to cart (Bókin) — no backend yet, just confirms the click */
   var addToCartBtn = document.getElementById("addToCartBtn");
@@ -445,7 +454,7 @@
     var defaultLabel = addToCartLabel.textContent;
     addToCartBtn.addEventListener("click", function () {
       var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
-      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990 }, qty);
+      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990, img: "images/1.jpg" }, qty);
       addToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
@@ -455,6 +464,60 @@
       }, 2200);
     });
   }
+
+  /* Photo product page (mynd.html?id=N) — pick a print size, add to cart */
+  var photoProductMedia = document.getElementById("photoProductMedia");
+  if (photoProductMedia) {
+    var photoId = parseInt(new URLSearchParams(window.location.search).get("id"), 10);
+    var photo = photos.filter(function (p) { return p.id === photoId; })[0] || photos[0];
+
+    var photoImage = document.getElementById("photoProductImage");
+    photoImage.src = photo.src;
+    photoImage.alt = photo.alt;
+    markLoadedWhenReady(photoImage, photoProductMedia);
+
+    var photoHeading = document.getElementById("photoProductHeading");
+    if (photoHeading) photoHeading.textContent = photo.alt;
+
+    var sizeOptionsEl = document.getElementById("sizeOptions");
+    var sizeButtons = sizeOptionsEl ? Array.prototype.slice.call(sizeOptionsEl.querySelectorAll(".size-option")) : [];
+    var selectedSize = null;
+    var selectSize = function (btn) {
+      selectedSize = { key: btn.getAttribute("data-size"), label: btn.querySelector(".size-option-name").textContent, price: parseInt(btn.getAttribute("data-price"), 10) };
+      sizeButtons.forEach(function (b) { b.classList.toggle("is-selected", b === btn); });
+    };
+    sizeButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () { selectSize(btn); });
+    });
+    if (sizeButtons.length) selectSize(sizeButtons[0]);
+
+    var photoQtyInput = document.getElementById("photoQty");
+    wireQuantityStepper(photoQtyInput, document.getElementById("photoQtyMinus"), document.getElementById("photoQtyPlus"));
+
+    var addPhotoToCartBtn = document.getElementById("addPhotoToCartBtn");
+    var addPhotoToCartLabel = document.getElementById("addPhotoToCartLabel");
+    if (addPhotoToCartBtn && addPhotoToCartLabel) {
+      var defaultPhotoLabel = addPhotoToCartLabel.textContent;
+      addPhotoToCartBtn.addEventListener("click", function () {
+        if (!selectedSize) return;
+        var qty = photoQtyInput ? (parseInt(photoQtyInput.value, 10) || 1) : 1;
+        addToCart({
+          id: "print-" + photo.id + "-" + selectedSize.key,
+          title: "Næsti — mynd " + photo.label + " · " + selectedSize.label,
+          price: selectedSize.price,
+          img: photo.src
+        }, qty);
+        addPhotoToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
+        addPhotoToCartBtn.classList.add("is-added");
+        window.clearTimeout(addPhotoToCartBtn._resetTimer);
+        addPhotoToCartBtn._resetTimer = window.setTimeout(function () {
+          addPhotoToCartLabel.textContent = defaultPhotoLabel;
+          addPhotoToCartBtn.classList.remove("is-added");
+        }, 2200);
+      });
+    }
+  }
+
   /* Contact form — no backend yet, just confirms the submit */
   var contactForm = document.getElementById("contactForm");
   if (contactForm) {
@@ -518,7 +581,7 @@
 
       var thumb = document.createElement("img");
       thumb.className = "cart-item-thumb";
-      thumb.src = "images/1.jpg";
+      thumb.src = item.img || "images/1.jpg";
       thumb.alt = "";
       thumb.loading = "lazy";
 
