@@ -11,17 +11,20 @@
   // Everything else is an honest "not shot yet" placeholder — no AI imagery.
   // "shape" records each real photo's actual orientation so the homepage
   // teaser (a fixed landscape slideshow box) can prefer wide shots that
-  // crop gracefully into it, instead of just taking the first N.
+  // crop gracefully into it, instead of just taking the first N. "w"/"h"
+  // are the source file's real pixel dimensions — the print product page
+  // uses their ratio to quote each size tier in the photo's own true
+  // proportions rather than a generic, same-for-every-photo range.
   var SLOTS = [
-    { index: 1, real: true, shape: "square", alt: "Kría kafar úr lofti yfir svartri strönd" },
-    { index: 2, real: true, shape: "square", alt: "Íslensk hyrna kind í háu grasi" },
+    { index: 1, real: true, shape: "square", w: 2000, h: 2000, alt: "Kría kafar úr lofti yfir svartri strönd" },
+    { index: 2, real: true, shape: "square", w: 2000, h: 2000, alt: "Íslensk hyrna kind í háu grasi" },
     { index: 3, real: false },
-    { index: 4, real: true, shape: "portrait", alt: "Tvær kríur á flugi í skýjuðum himni" },
+    { index: 4, real: true, shape: "portrait", w: 1334, h: 2000, alt: "Tvær kríur á flugi í skýjuðum himni" },
     { index: 5, real: false },
-    { index: 6, real: true, shape: "square", alt: "Göngufólk á Sólheimajökli" },
+    { index: 6, real: true, shape: "square", w: 1500, h: 1500, alt: "Göngufólk á Sólheimajökli" },
     { index: 7, real: false },
     { index: 8, real: false },
-    { index: 9, real: true, shape: "landscape", alt: "Kajakræðarar undir jökulsporði" },
+    { index: 9, real: true, shape: "landscape", w: 1500, h: 1001, alt: "Kajakræðarar undir jökulsporði" },
     { index: 10, real: false }
   ];
 
@@ -33,7 +36,8 @@
       label: String(slot.index).padStart(2, "0"),
       src: "images/" + slot.index + ".jpg",
       alt: slot.alt,
-      shape: slot.shape
+      shape: slot.shape,
+      ratio: slot.w / slot.h
     });
   });
 
@@ -481,6 +485,24 @@
 
     var sizeOptionsEl = document.getElementById("sizeOptions");
     var sizeButtons = sizeOptionsEl ? Array.prototype.slice.call(sizeOptionsEl.querySelectorAll(".size-option")) : [];
+
+    // Each tier's "long edge" (its longest side, in cm) is fixed, but the
+    // short edge follows this specific photo's real aspect ratio — so a
+    // square shot prints square, a wide one prints wide, etc., instead of
+    // every photo quoting the same generic range regardless of its shape.
+    sizeButtons.forEach(function (btn) {
+      var longEdge = parseInt(btn.getAttribute("data-long-edge"), 10);
+      var w, h;
+      if (photo.ratio >= 1) {
+        w = longEdge;
+        h = Math.round(longEdge / photo.ratio);
+      } else {
+        h = longEdge;
+        w = Math.round(longEdge * photo.ratio);
+      }
+      btn.querySelector(".size-option-dim").textContent = w + " × " + h + " cm";
+    });
+
     var selectedSize = null;
     var selectSize = function (btn) {
       selectedSize = { key: btn.getAttribute("data-size"), label: btn.querySelector(".size-option-name").textContent, price: parseInt(btn.getAttribute("data-price"), 10) };
