@@ -18,12 +18,12 @@
   var SLOTS = [
     { index: 1, real: true, shape: "square", w: 2000, h: 2000, alt: "Kría kafar úr lofti yfir svartri strönd" },
     { index: 2, real: true, shape: "square", w: 2000, h: 2000, alt: "Íslensk hyrna kind í háu grasi" },
-    { index: 3, real: false },
+    { index: 3, real: true, shape: "landscape", w: 2000, h: 1334, alt: "Hengibrú yfir móðuvatn í kvöldkyrrð" },
     { index: 4, real: true, shape: "portrait", w: 1334, h: 2000, alt: "Tvær kríur á flugi í skýjuðum himni" },
-    { index: 5, real: false },
+    { index: 5, real: true, shape: "landscape", w: 2000, h: 1600, alt: "Snævi þakin fjöll undir heiðskírum himni" },
     { index: 6, real: true, shape: "square", w: 1500, h: 1500, alt: "Göngufólk á Sólheimajökli" },
-    { index: 7, real: false },
-    { index: 8, real: false },
+    { index: 7, real: true, shape: "landscape", w: 2000, h: 1333, alt: "Þoka liðast um fjallsegg í mistri" },
+    { index: 8, real: true, shape: "landscape", w: 2000, h: 1333, alt: "Hreyfióskýr augnablik af íþróttaleik" },
     { index: 9, real: true, shape: "landscape", w: 1500, h: 1001, alt: "Kajakræðarar undir jökulsporði" },
     { index: 10, real: false }
   ];
@@ -734,8 +734,11 @@
   /* ---------------- Page-transition aperture overlay ---------------- */
   /* A 9-blade iris overlay covers the page on click, holds while the next
      page loads underneath, then sweeps open to reveal it — see the CSS
-     comment above .aperture-overlay for how the blade geometry works. */
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+     comment above .aperture-overlay for how the blade geometry works.
+     Homepage-only now: elsewhere, links are plain, instant navigation. */
+  var indexPathname = window.location.pathname;
+  var isIndexPage = indexPathname === "/" || indexPathname === "" || /\/index\.html$/.test(indexPathname);
+  if (isIndexPage && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     var APERTURE_DURATION = 400;
 
     var apertureOverlay = document.createElement("div");
