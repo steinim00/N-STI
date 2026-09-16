@@ -483,6 +483,12 @@
     var photoHeading = document.getElementById("photoProductHeading");
     if (photoHeading) photoHeading.textContent = photo.alt;
 
+    // The side label only has a natural column to sit in when the photo
+    // itself is the tall one — a square or landscape shot leaves no such
+    // strip, so the label moves onto the photo instead (see .is-overlay).
+    var photoFrame = photoProductMedia.closest(".photo-product-frame");
+    if (photoFrame) photoFrame.classList.toggle("is-overlay", photo.shape !== "portrait");
+
     var sizeOptionsEl = document.getElementById("sizeOptions");
     var sizeButtons = sizeOptionsEl ? Array.prototype.slice.call(sizeOptionsEl.querySelectorAll(".size-option")) : [];
 
