@@ -1180,7 +1180,7 @@ h1, h2, h3, h4, h5, h6 {
 .cart-item-thumb {
   width: 72px;
   height: 72px;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--naestagray);
   filter: grayscale(1) contrast(1.05);
 }
