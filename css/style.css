@@ -1051,6 +1051,61 @@ h1, h2, h3, h4, h5, h6 {
   .book { grid-template-columns: 1fr; }
 }
 
+/* ---------------- Book spreads preview (Bókin) ---------------- */
+/* A stack of two-page spreads, in shooting order, standing in for the
+   book's actual print layout. Each spread is a flex row of two photos
+   with a thin black gutter between them (the spine), rather than a
+   plain grid — real book pages sit flush against that seam, a grid gap
+   would look like a gallery instead. Photos not in the print's 3:2
+   ratio are flagged in red: they haven't been reframed for print yet. */
+.book-spreads-section {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--gutter) clamp(5rem, 10vw, 8rem);
+}
+.book-spreads-note {
+  max-width: 640px;
+  color: #2a2a2a;
+  margin: 0 0 clamp(2rem, 5vw, 3rem);
+}
+.book-spreads {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+.book-spread {
+  display: flex;
+  gap: 2px;
+  background: var(--black);
+}
+.book-spread-page {
+  flex: 1 1 50%;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+.book-spread-page img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(1) contrast(1.05);
+}
+.book-spread-page.is-bad-ratio { outline: 3px solid #c0392b; outline-offset: -3px; }
+.book-spread-page.is-bad-ratio::after {
+  content: "Ekki 3:2";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #c0392b;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.6rem;
+}
+
 /* ---------------- Photo product page (mynd.html) ---------------- */
 /* This page's own header sits much closer to the fixed nav bar than the
    generic .page-header default, and the frame below sits much closer to
