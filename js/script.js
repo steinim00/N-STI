@@ -458,7 +458,7 @@
     var defaultLabel = addToCartLabel.textContent;
     addToCartBtn.addEventListener("click", function () {
       var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
-      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990, img: "images/book/001.jpg" }, qty);
+      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990, img: "images/1.jpg" }, qty);
       addToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
@@ -636,7 +636,7 @@
 
       var thumb = document.createElement("img");
       thumb.className = "cart-item-thumb";
-      thumb.src = item.img || "images/book/001.jpg";
+      thumb.src = item.img || "images/1.jpg";
       thumb.alt = "";
       thumb.loading = "lazy";
 
