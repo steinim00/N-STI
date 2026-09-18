@@ -16,7 +16,7 @@
   // uses their ratio to quote each size tier in the photo's own true
   // proportions rather than a generic, same-for-every-photo range.
   var SLOTS = [
-    { index: 1, real: true, shape: "square", w: 2000, h: 2000, alt: "Kría kafar úr lofti yfir svartri strönd" },
+    { index: 1, real: true, shape: "landscape", w: 2000, h: 1333, alt: "Íshella á kyrru, svörtu vatni" },
     { index: 2, real: true, shape: "square", w: 2000, h: 2000, alt: "Íslensk hyrna kind í háu grasi" },
     { index: 3, real: true, shape: "landscape", w: 2000, h: 1334, alt: "Hengibrú yfir móðuvatn í kvöldkyrrð" },
     { index: 4, real: true, shape: "portrait", w: 1334, h: 2000, alt: "Tvær kríur á flugi í skýjuðum himni" },
@@ -458,7 +458,7 @@
     var defaultLabel = addToCartLabel.textContent;
     addToCartBtn.addEventListener("click", function () {
       var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
-      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990, img: "images/book/001.jpg" }, qty);
+      addToCart({ id: "ljosmyndabok", title: "Næsti — ljósmyndabókin", price: 9990, img: "images/1.jpg" }, qty);
       addToCartLabel.textContent = "Bætt í körfu (" + qty + ") ✓";
       addToCartBtn.classList.add("is-added");
       window.clearTimeout(addToCartBtn._resetTimer);
@@ -636,7 +636,7 @@
 
       var thumb = document.createElement("img");
       thumb.className = "cart-item-thumb";
-      thumb.src = item.img || "images/book/001.jpg";
+      thumb.src = item.img || "images/1.jpg";
       thumb.alt = "";
       thumb.loading = "lazy";
 
