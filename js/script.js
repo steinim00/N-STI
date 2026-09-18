@@ -469,15 +469,15 @@
     });
   }
 
-  /* Book spreads preview (Bókin) — photos 001.jpg..104.jpg in images/book/,
-     already named and ordered by shooting time (see the resize script that
-     produced them), so the page just has to pair them up two per spread.
+  /* Book spreads preview (Bókin) — photos 001.jpg..094.jpg in images/book/,
+     curated and hand-ordered for visual flow (not chronological, not by
+     filename), duplicates removed, paired up two per spread.
      BOOK_BAD_RATIO lists the (1-indexed) photos that came in at 4:3 rather
      than the book's 3:2 print ratio, still needing a reframe. */
   var bookSpreadsEl = document.getElementById("bookSpreads");
   if (bookSpreadsEl) {
-    var BOOK_PHOTO_COUNT = 104;
-    var BOOK_BAD_RATIO = [54, 57, 58, 67, 68, 79, 80, 83, 93];
+    var BOOK_PHOTO_COUNT = 94;
+    var BOOK_BAD_RATIO = [12, 38, 39, 41, 62, 74, 77, 80];
     for (var spreadStart = 1; spreadStart <= BOOK_PHOTO_COUNT; spreadStart += 2) {
       var spread = document.createElement("div");
       spread.className = "book-spread";
