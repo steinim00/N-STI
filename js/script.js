@@ -469,6 +469,33 @@
     });
   }
 
+  /* Book spreads preview (Bókin) — photos 001.jpg..104.jpg in images/book/,
+     already named and ordered by shooting time (see the resize script that
+     produced them), so the page just has to pair them up two per spread.
+     BOOK_BAD_RATIO lists the (1-indexed) photos that came in at 4:3 rather
+     than the book's 3:2 print ratio, still needing a reframe. */
+  var bookSpreadsEl = document.getElementById("bookSpreads");
+  if (bookSpreadsEl) {
+    var BOOK_PHOTO_COUNT = 104;
+    var BOOK_BAD_RATIO = [54, 57, 58, 67, 68, 79, 80, 83, 93];
+    for (var spreadStart = 1; spreadStart <= BOOK_PHOTO_COUNT; spreadStart += 2) {
+      var spread = document.createElement("div");
+      spread.className = "book-spread";
+      [spreadStart, spreadStart + 1].forEach(function (n) {
+        if (n > BOOK_PHOTO_COUNT) return;
+        var page = document.createElement("div");
+        page.className = "book-spread-page" + (BOOK_BAD_RATIO.indexOf(n) !== -1 ? " is-bad-ratio" : "");
+        var img = document.createElement("img");
+        img.src = "images/book/" + String(n).padStart(3, "0") + ".jpg";
+        img.alt = "Bls. " + n + " í bókinni";
+        img.loading = "lazy";
+        page.appendChild(img);
+        spread.appendChild(page);
+      });
+      bookSpreadsEl.appendChild(spread);
+    }
+  }
+
   /* Photo product page (mynd.html?id=N) — pick a print size, add to cart */
   var photoProductMedia = document.getElementById("photoProductMedia");
   if (photoProductMedia) {
