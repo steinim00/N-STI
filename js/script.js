@@ -479,7 +479,7 @@
   var bookSpreadsEl = document.getElementById("bookSpreads");
   if (bookSpreadsEl) {
     var BOOK_PHOTO_COUNT = 97;
-    var BOOK_BAD_RATIO = [12, 38, 39, 41, 62, 77, 80, 83];
+    var BOOK_BAD_RATIO = [12, 37, 38, 41, 62, 77, 80, 83];
     for (var spreadStart = 1; spreadStart <= BOOK_PHOTO_COUNT; spreadStart += 2) {
       var spread = document.createElement("div");
       spread.className = "book-spread";
