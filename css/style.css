@@ -1452,6 +1452,28 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
   text-transform: uppercase;
 }
+.lightbox-figure--spread {
+  max-width: min(94vw, 1400px);
+}
+.lightbox-spread {
+  display: flex;
+  gap: 2px;
+  background: var(--black);
+  justify-content: center;
+}
+.lightbox-spread img {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: 50%;
+  max-height: 78vh;
+  width: auto;
+  height: auto;
+  margin: 0;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.08);
+}
+.lightbox-spread img[hidden] { display: none; }
+.lightbox-spread:has(img[hidden]) img { max-width: 100%; }
 .lightbox-close,
 .lightbox-nav {
   background: transparent;
