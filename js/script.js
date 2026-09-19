@@ -469,30 +469,84 @@
     });
   }
 
-  /* Book spreads preview (Bókin) — photos 001.jpg..094.jpg in images/book/,
+  /* Book spreads preview (Bókin) — photos 001.jpg..097.jpg in images/book/,
      curated and hand-ordered for visual flow (not chronological, not by
-     filename), duplicates removed, paired up two per spread.
+     filename), duplicates removed, paired up two per spread. Each page
+     shows its page number, and clicking any page opens a slideshow that
+     steps through the whole book in order.
      BOOK_BAD_RATIO lists the (1-indexed) photos that came in at 4:3 rather
      than the book's 3:2 print ratio, still needing a reframe. */
   var bookSpreadsEl = document.getElementById("bookSpreads");
   if (bookSpreadsEl) {
-    var BOOK_PHOTO_COUNT = 94;
-    var BOOK_BAD_RATIO = [12, 38, 39, 41, 62, 74, 77, 80];
+    var BOOK_PHOTO_COUNT = 97;
+    var BOOK_BAD_RATIO = [12, 38, 39, 41, 62, 77, 80, 83];
     for (var spreadStart = 1; spreadStart <= BOOK_PHOTO_COUNT; spreadStart += 2) {
       var spread = document.createElement("div");
       spread.className = "book-spread";
       [spreadStart, spreadStart + 1].forEach(function (n) {
         if (n > BOOK_PHOTO_COUNT) return;
-        var page = document.createElement("div");
+        var page = document.createElement("button");
+        page.type = "button";
         page.className = "book-spread-page" + (BOOK_BAD_RATIO.indexOf(n) !== -1 ? " is-bad-ratio" : "");
+        page.setAttribute("data-book-page", n);
+        page.setAttribute("aria-label", "Skoða bls. " + n + " í rennisýningu");
         var img = document.createElement("img");
         img.src = "images/book/" + String(n).padStart(3, "0") + ".jpg";
         img.alt = "Bls. " + n + " í bókinni";
         img.loading = "lazy";
         page.appendChild(img);
+        var pageNum = document.createElement("span");
+        pageNum.className = "book-spread-page-num";
+        pageNum.textContent = n;
+        page.appendChild(pageNum);
         spread.appendChild(page);
       });
       bookSpreadsEl.appendChild(spread);
+    }
+
+    /* Book slideshow lightbox */
+    var bookLightbox = document.getElementById("bookLightbox");
+    if (bookLightbox) {
+      var bookLightboxImage = document.getElementById("bookLightboxImage");
+      var bookLightboxCaption = document.getElementById("bookLightboxCaption");
+      var bookCloseBtn = document.getElementById("bookLightboxClose");
+      var bookPrevBtn = document.getElementById("bookLightboxPrev");
+      var bookNextBtn = document.getElementById("bookLightboxNext");
+      var bookCurrent = 1;
+      var bookLastFocused = null;
+
+      var openBookLightbox = function (n) {
+        bookCurrent = ((n - 1 + BOOK_PHOTO_COUNT) % BOOK_PHOTO_COUNT) + 1;
+        bookLightboxImage.src = "images/book/" + String(bookCurrent).padStart(3, "0") + ".jpg";
+        bookLightboxImage.alt = "Bls. " + bookCurrent + " í bókinni";
+        bookLightboxCaption.textContent = "Bls. " + bookCurrent + " af " + BOOK_PHOTO_COUNT;
+        bookLastFocused = document.activeElement;
+        bookLightbox.hidden = false;
+        document.body.style.overflow = "hidden";
+        bookCloseBtn.focus();
+      };
+      var closeBookLightbox = function () {
+        bookLightbox.hidden = true;
+        document.body.style.overflow = "";
+        if (bookLastFocused) bookLastFocused.focus();
+      };
+
+      bookSpreadsEl.addEventListener("click", function (e) {
+        var page = e.target.closest("[data-book-page]");
+        if (page) openBookLightbox(parseInt(page.getAttribute("data-book-page"), 10));
+      });
+      bookCloseBtn.addEventListener("click", closeBookLightbox);
+      bookPrevBtn.addEventListener("click", function () { openBookLightbox(bookCurrent - 1); });
+      bookNextBtn.addEventListener("click", function () { openBookLightbox(bookCurrent + 1); });
+      bookLightbox.addEventListener("click", function (e) {
+        if (e.target === bookLightbox) closeBookLightbox();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (bookLightbox.hidden) return;
+        if (e.key === "Escape") closeBookLightbox();
+        if (e.key === "ArrowLeft") openBookLightbox(bookCurrent - 1);
+        if (e.key === "ArrowRight") openBookLightbox(bookCurrent + 1);
+      });
     }
   }
 
