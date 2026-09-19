@@ -91,7 +91,8 @@
       <h2 class="section-title">Uppröðun í bókinni</h2>
     </div>
     <p class="book-spreads-note">Forskoðun á röðun mynda í bókinni, tvær myndir á hverri opnu, raðað eftir
-      listrænni heildarmynd frekar en tímaröð. Rauðmerktar myndir eru ekki í 3:2 hlutföllum og þarf að laga fyrir prentun.</p>
+      listrænni heildarmynd frekar en tímaröð. Bls.-tal er á hverri mynd og hægt er að smella á mynd til að
+      skoða hana í rennisýningu. Rauðmerktar myndir eru ekki í 3:2 hlutföllum og þarf að laga fyrir prentun.</p>
     <div class="book-spreads" id="bookSpreads"></div>
   </section>
 
@@ -106,6 +107,16 @@
     <p class="footer-copy">&copy; <span id="year"></span> Næsti. Öll réttindi áskilin.</p>
   </div>
 </footer>
+
+<div class="lightbox" id="bookLightbox" role="dialog" aria-modal="true" aria-label="Rennisýning bókarinnar" hidden>
+  <button class="lightbox-close" id="bookLightboxClose" aria-label="Loka">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="bookLightboxPrev" aria-label="Fyrri síða">&#8249;</button>
+  <figure class="lightbox-figure">
+    <img src="" alt="" id="bookLightboxImage">
+    <figcaption id="bookLightboxCaption"></figcaption>
+  </figure>
+  <button class="lightbox-nav lightbox-next" id="bookLightboxNext" aria-label="Næsta síða">&#8250;</button>
+</div>
 
 <script src="js/script.js"></script>
 </body>
