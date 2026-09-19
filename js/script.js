@@ -504,22 +504,41 @@
       bookSpreadsEl.appendChild(spread);
     }
 
-    /* Book slideshow lightbox */
+    /* Book slideshow lightbox — steps through whole spreads (both pages
+       together) rather than one page at a time, so a spread reads as it
+       will in the printed book. */
     var bookLightbox = document.getElementById("bookLightbox");
     if (bookLightbox) {
-      var bookLightboxImage = document.getElementById("bookLightboxImage");
+      var bookLightboxImageLeft = document.getElementById("bookLightboxImageLeft");
+      var bookLightboxImageRight = document.getElementById("bookLightboxImageRight");
       var bookLightboxCaption = document.getElementById("bookLightboxCaption");
       var bookCloseBtn = document.getElementById("bookLightboxClose");
       var bookPrevBtn = document.getElementById("bookLightboxPrev");
       var bookNextBtn = document.getElementById("bookLightboxNext");
-      var bookCurrent = 1;
+      var BOOK_SPREAD_COUNT = Math.ceil(BOOK_PHOTO_COUNT / 2);
+      var bookCurrentSpread = 1;
       var bookLastFocused = null;
 
-      var openBookLightbox = function (n) {
-        bookCurrent = ((n - 1 + BOOK_PHOTO_COUNT) % BOOK_PHOTO_COUNT) + 1;
-        bookLightboxImage.src = "images/book/" + String(bookCurrent).padStart(3, "0") + ".jpg";
-        bookLightboxImage.alt = "Bls. " + bookCurrent + " í bókinni";
-        bookLightboxCaption.textContent = "Bls. " + bookCurrent + " af " + BOOK_PHOTO_COUNT;
+      var setBookPage = function (imgEl, n) {
+        if (n > BOOK_PHOTO_COUNT) {
+          imgEl.removeAttribute("src");
+          imgEl.alt = "";
+          imgEl.hidden = true;
+          return;
+        }
+        imgEl.hidden = false;
+        imgEl.src = "images/book/" + String(n).padStart(3, "0") + ".jpg";
+        imgEl.alt = "Bls. " + n + " í bókinni";
+      };
+
+      var openBookLightbox = function (spreadIndex) {
+        bookCurrentSpread = ((spreadIndex - 1 + BOOK_SPREAD_COUNT) % BOOK_SPREAD_COUNT) + 1;
+        var left = bookCurrentSpread * 2 - 1;
+        var right = bookCurrentSpread * 2;
+        setBookPage(bookLightboxImageLeft, left);
+        setBookPage(bookLightboxImageRight, right);
+        bookLightboxCaption.textContent = "Opna " + bookCurrentSpread + " af " + BOOK_SPREAD_COUNT +
+          " — bls. " + left + (right <= BOOK_PHOTO_COUNT ? "–" + right : "");
         bookLastFocused = document.activeElement;
         bookLightbox.hidden = false;
         document.body.style.overflow = "hidden";
@@ -533,19 +552,19 @@
 
       bookSpreadsEl.addEventListener("click", function (e) {
         var page = e.target.closest("[data-book-page]");
-        if (page) openBookLightbox(parseInt(page.getAttribute("data-book-page"), 10));
+        if (page) openBookLightbox(Math.ceil(parseInt(page.getAttribute("data-book-page"), 10) / 2));
       });
       bookCloseBtn.addEventListener("click", closeBookLightbox);
-      bookPrevBtn.addEventListener("click", function () { openBookLightbox(bookCurrent - 1); });
-      bookNextBtn.addEventListener("click", function () { openBookLightbox(bookCurrent + 1); });
+      bookPrevBtn.addEventListener("click", function () { openBookLightbox(bookCurrentSpread - 1); });
+      bookNextBtn.addEventListener("click", function () { openBookLightbox(bookCurrentSpread + 1); });
       bookLightbox.addEventListener("click", function (e) {
         if (e.target === bookLightbox) closeBookLightbox();
       });
       document.addEventListener("keydown", function (e) {
         if (bookLightbox.hidden) return;
         if (e.key === "Escape") closeBookLightbox();
-        if (e.key === "ArrowLeft") openBookLightbox(bookCurrent - 1);
-        if (e.key === "ArrowRight") openBookLightbox(bookCurrent + 1);
+        if (e.key === "ArrowLeft") openBookLightbox(bookCurrentSpread - 1);
+        if (e.key === "ArrowRight") openBookLightbox(bookCurrentSpread + 1);
       });
     }
   }
