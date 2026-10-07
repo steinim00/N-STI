@@ -945,9 +945,8 @@ h1, h2, h3, h4, h5, h6 {
 .book-cover-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
-  letter-spacing: 0.06em;
-  line-height: 1.15;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  letter-spacing: 0.08em;
   margin: 0;
 }
 .book-cover-brand {
@@ -963,6 +962,18 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.08em;
   margin: 0;
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.book-cover-corner {
+  position: absolute;
+  top: clamp(2rem, 6%, 3rem);
+  right: clamp(0.8rem, 3%, 1.5rem);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  letter-spacing: 0.14em;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .book-heading {
   font-family: var(--font-display);
