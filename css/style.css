@@ -945,8 +945,9 @@ h1, h2, h3, h4, h5, h6 {
 .book-cover-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(1.6rem, 4.2vw, 2.4rem);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
   letter-spacing: 0.06em;
+  line-height: 1.15;
   margin: 0;
 }
 .book-cover-brand {
